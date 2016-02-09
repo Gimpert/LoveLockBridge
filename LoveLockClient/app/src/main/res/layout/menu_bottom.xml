@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    tools:context="com.example.owner.lovelockclient.MainActivity"
+    tools:showIn="@layout/activity_main"
+    >
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_button_height" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_button_height" />
+
+
+
+</LinearLayout>
