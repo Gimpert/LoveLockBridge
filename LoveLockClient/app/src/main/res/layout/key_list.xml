@@ -8,12 +8,11 @@
     tools:context="com.example.owner.lovelockclient.MainActivity"
     tools:showIn="@layout/content_main">
 
-    <ListView
-        android:id="@+id/keys"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+    <ExpandableListView
+        android:id="@+id/keys_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 
 </android.support.v4.widget.NestedScrollView>
