@@ -11,7 +11,7 @@ import java.net.URL;
  * Created by Joseph Gregory on 2/15/2016.
  */
 public class ServerRelay {
-    public static final String DEFAULT_URL = "asdfafsd";
+    public static final String DEFAULT_URL = "http://152.14.106.21:3000/locks";
     private String URL;
     public ServerRelay() {
         this(DEFAULT_URL);
