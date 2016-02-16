@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Love Lock Client</string>
+    <string name="throw_away_key">Throw Away</string>
+    <string name="send_key">Send</string>
+    <string name="unlock">Unlock</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

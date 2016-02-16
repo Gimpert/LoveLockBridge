@@ -24,6 +24,12 @@ public class Lock implements Serializable {
      */
     protected String message;
 
+    public Lock(String id, String name, String message) {
+        this.id = id;
+        this.name = name;
+        this.message = message;
+    }
+
     public String getMessage() {
         return message;
     }

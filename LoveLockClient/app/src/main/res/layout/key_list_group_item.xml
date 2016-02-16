@@ -12,6 +12,7 @@
         android:src="@drawable/key_img"/>
 
     <TextView
+        android:id="@+id/key_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"

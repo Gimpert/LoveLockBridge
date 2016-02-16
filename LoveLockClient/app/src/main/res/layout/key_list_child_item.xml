@@ -4,6 +4,14 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/list_padding">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unlock"
+        android:id="@+id/unlock_button"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/button_padding"
+        android:layout_margin="@dimen/button_margin" />
 
     <Button
         android:layout_width="wrap_content"
@@ -23,12 +31,5 @@
         android:padding="@dimen/button_padding"
         android:layout_margin="@dimen/button_margin" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/unlock"
-        android:id="@+id/unlock_button"
-        android:layout_centerHorizontal="true"
-        android:padding="@dimen/button_padding"
-        android:layout_margin="@dimen/button_margin" />
+
 </RelativeLayout>
