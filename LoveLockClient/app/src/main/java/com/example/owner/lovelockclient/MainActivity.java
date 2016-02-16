@@ -29,10 +29,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         expKeyListView = (ExpandableListView) findViewById(R.id.keys_list);
+        prepareListData();
         listAdapter = new KeyListAdapter(this, listDataHeader, listDataChild);
 
 
-        prepareListData();
+
         expKeyListView.setAdapter(listAdapter);
 
         expKeyListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
