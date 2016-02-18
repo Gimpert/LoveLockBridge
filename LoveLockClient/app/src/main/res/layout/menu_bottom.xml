@@ -11,11 +11,17 @@
     >
 
     <Button
+        android:id="@+id/bottom_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_button_height" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_button_height" />
+    <EditText
+        android:id="@+id/etResponse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 
 
 

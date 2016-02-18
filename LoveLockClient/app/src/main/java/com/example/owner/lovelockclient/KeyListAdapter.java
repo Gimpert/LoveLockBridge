@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -19,9 +20,9 @@ public class KeyListAdapter extends BaseExpandableListAdapter{
 
     private Context context;
     private List<String> listDataHeader;
-    private HashMap<String, List<String>> listDataChild;
+    private HashMap<String, Lock> listDataChild;
 
-    public KeyListAdapter(Context context, List<String> listDataHeader, HashMap<String, List<String>> listDataChild) {
+    public KeyListAdapter(Context context, List<String> listDataHeader, HashMap<String, Lock> listDataChild) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listDataChild = listDataChild;
@@ -34,7 +35,7 @@ public class KeyListAdapter extends BaseExpandableListAdapter{
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this.listDataChild.get(this.listDataHeader.get(groupPosition)).size();
+        return 1;
     }
 
     @Override
@@ -60,7 +61,7 @@ public class KeyListAdapter extends BaseExpandableListAdapter{
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     @Override
@@ -78,15 +79,15 @@ public class KeyListAdapter extends BaseExpandableListAdapter{
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        //final String childText = (String) getChild(groupPosition, childPosition);
         LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null){
-            convertView = inflater.inflate(R.layout.key_list_child_item, null);
+            convertView = inflater.inflate(R.layout.key_list_child_item, parent);
         }
-
-        Button sendButton = (Button) convertView.findViewById(R.id.send_button);
-        Button throwAwayButton = (Button) convertView.findViewById(R.id.throw_away_button);
         Button unlockButton = (Button) convertView.findViewById(R.id.unlock_button);
+        Button sendButton = (Button) convertView.findViewById(R.id.send_button);
+        Button throwButton = (Button) convertView.findViewById(R.id.throw_away_button);
+
 
         return convertView;
     }
