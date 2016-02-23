@@ -3,19 +3,15 @@ package com.example.owner.lovelockclient;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import com.example.owner.bridgecommunication.ServerRelay;
+import com.example.owner.BridgeCommunication.ServerRelay;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -28,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     ExpandableListAdapter listAdapter;
     ExpandableListView expKeyListView;
     List<String> listDataHeader;
-    HashMap<String, Lock> listDataChild;
+    HashMap<String, List<Lock>> listDataChild;
 
     TextView tvResponse;
     ServerRelay serverRelay;
@@ -56,9 +52,7 @@ public class MainActivity extends AppCompatActivity {
         listAdapter = new KeyListAdapter(this, listDataHeader, listDataChild);
 
 
-
         expKeyListView.setAdapter(listAdapter);
-        expKeyListView.setOnGroupClickListener(null);
 
     }
 
@@ -84,14 +78,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, Lock>();
+        listDataChild = new HashMap<String, List<Lock>>();
+        List<Lock> subList = new ArrayList<Lock>();
 
         Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock", "This is test lock" );
+        subList.add(testlock1);
         //List<String> test = new ArrayList<String>();
         //test.add(testlock1.getId());
 
+
         listDataHeader.add(testlock1.getName());
-        listDataChild.put(listDataHeader.get(0), testlock1);
+        listDataChild.put(listDataHeader.get(0), subList);
 
 
     }
