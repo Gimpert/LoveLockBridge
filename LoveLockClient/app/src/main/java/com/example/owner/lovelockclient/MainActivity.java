@@ -1,5 +1,6 @@
 package com.example.owner.lovelockclient;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,9 +16,12 @@ import android.widget.ExpandableListView;
 
 import com.example.owner.bridgecommunication.ServerRelay;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
     ExpandableListAdapter listAdapter;
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText etResponse;
     ServerRelay serverRelay;
+    ArrayList<Lock> locks;
     //String response;
 
     @Override
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         expKeyListView = (ExpandableListView) findViewById(R.id.keys_list);
 
+        //loadLocks();
+
         prepareListData();
         listAdapter = new KeyListAdapter(this, listDataHeader, listDataChild);
 
@@ -51,6 +58,14 @@ public class MainActivity extends AppCompatActivity {
         expKeyListView.setAdapter(listAdapter);
         expKeyListView.setOnGroupClickListener(null);
 
+    }
+
+    private void loadLocks() {
+        try {
+            FileOutputStream out = openFileOutput("locks", Context.MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            Log.d("exceptions", "file not found");
+        }
     }
 
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {

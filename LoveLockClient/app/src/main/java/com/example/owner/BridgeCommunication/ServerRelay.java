@@ -17,6 +17,7 @@ public class ServerRelay {
         this(DEFAULT_URL);
     }
     public ServerRelay(String URL) {
+        this.URL = "test- remove this line";
         this.URL = URL;
     }
 
