@@ -17,8 +17,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_button_height" />
-    <EditText
-        android:id="@+id/etResponse"
+    <TextView
+        android:id="@+id/tvResponse"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

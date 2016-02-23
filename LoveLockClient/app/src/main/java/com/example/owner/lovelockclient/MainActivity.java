@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.example.owner.bridgecommunication.ServerRelay;
 
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     List<String> listDataHeader;
     HashMap<String, Lock> listDataChild;
 
-    EditText etResponse;
+    TextView tvResponse;
     ServerRelay serverRelay;
     //String response;
 
@@ -36,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        etResponse = (EditText) findViewById(R.id.etResponse);
+        tvResponse = (TextView) findViewById(R.id.tvResponse);
         serverRelay = new ServerRelay();
+
         new HttpAsyncTask().execute(serverRelay.getURL());
 
 
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         protected void onPostExecute(String result){
-            etResponse.setText(result);
+            tvResponse.setText(result);
         }
     }
 
@@ -100,3 +102,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
