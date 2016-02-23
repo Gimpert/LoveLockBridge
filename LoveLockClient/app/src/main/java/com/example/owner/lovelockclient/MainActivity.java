@@ -3,30 +3,39 @@ package com.example.owner.lovelockclient;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 
-import com.example.owner.BridgeCommunication.ServerRelay;
+import com.example.owner.bridgecommunication.ServerRelay;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String storedLocksFileName = "locks";
+
     ExpandableListAdapter listAdapter;
     ExpandableListView expKeyListView;
     List<String> listDataHeader;
-    HashMap<String, List<Lock>> listDataChild;
+    HashMap<String, Lock> listDataChild;
 
-    TextView tvResponse;
+    EditText etResponse;
     ServerRelay serverRelay;
     ArrayList<Lock> locks;
     //String response;
@@ -38,28 +47,39 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        tvResponse = (TextView) findViewById(R.id.tvResponse);
+        etResponse = (EditText) findViewById(R.id.etResponse);
         serverRelay = new ServerRelay();
-
         new HttpAsyncTask().execute(serverRelay.getURL());
 
 
         expKeyListView = (ExpandableListView) findViewById(R.id.keys_list);
 
-        //loadLocks();
+        loadLocks();
 
         prepareListData();
         listAdapter = new KeyListAdapter(this, listDataHeader, listDataChild);
 
 
+
         expKeyListView.setAdapter(listAdapter);
+        expKeyListView.setOnGroupClickListener(null);
 
     }
 
     private void loadLocks() {
         try {
-            FileOutputStream out = openFileOutput("locks", Context.MODE_PRIVATE);
-        } catch (FileNotFoundException e) {
+            FileInputStream in = openFileInput(storedLocksFileName);
+            InputStreamReader inputStreamReader = new InputStreamReader(in);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                int curStart = 0;
+                String lockId = line.substring(curStart, line.indexOf(':'));
+                String lockName = line.substring(curStart, line.indexOf(':'));
+                String lockMessage = line.substring(curStart); //TODO: what if this has a new line? then we can't use bufferedReader.newLine
+                locks.add(new Lock(lockId, lockName, lockMessage));
+            }
+        } catch (Exception e) {
             Log.d("exceptions", "file not found");
         }
     }
@@ -72,23 +92,25 @@ public class MainActivity extends AppCompatActivity {
 
         }
         protected void onPostExecute(String result){
-            tvResponse.setText(result);
+            etResponse.setText(result);
         }
     }
 
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<Lock>>();
-        List<Lock> subList = new ArrayList<Lock>();
+        listDataChild = new HashMap<String, Lock>();
 
-        Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock", "This is test lock" );
-        subList.add(testlock1);
+        //Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock", "This is test lock" );
         //List<String> test = new ArrayList<String>();
         //test.add(testlock1.getId());
-
-
-        listDataHeader.add(testlock1.getName());
-        listDataChild.put(listDataHeader.get(0), subList);
+        Iterator<Lock> it = locks.iterator();
+        while (it.hasNext()) {
+            Lock curLock = it.next();
+            listDataHeader.add(curLock.getName());
+            listDataChild.put(curLock.getName(), curLock);
+        }
+        //listDataHeader.add(testlock1.getName());
+        //listDataChild.put(listDataHeader.get(0), testlock1);
 
 
     }
@@ -114,4 +136,3 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
-
