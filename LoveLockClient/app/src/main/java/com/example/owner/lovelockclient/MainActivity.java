@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,7 +29,8 @@ import java.util.List;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String storedLocksFileName = "locks";
+    public static boolean DEBUG = false; //TODO: remove all debug functionality for final product
+    private static Context CONTEXT;
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expKeyListView;
@@ -37,11 +39,12 @@ public class MainActivity extends AppCompatActivity {
 
     EditText etResponse;
     ServerRelay serverRelay;
-    ArrayList<Lock> locks;
+    LockList lockList;
     //String response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -54,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         expKeyListView = (ExpandableListView) findViewById(R.id.keys_list);
 
-        loadLocks();
+        lockList = new LockList();
+        lockList.loadLocks();
 
         prepareListData();
         listAdapter = new KeyListAdapter(this, listDataHeader, listDataChild);
@@ -66,22 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void loadLocks() {
-        try {
-            FileInputStream in = openFileInput(storedLocksFileName);
-            InputStreamReader inputStreamReader = new InputStreamReader(in);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                int curStart = 0;
-                String lockId = line.substring(curStart, line.indexOf(':'));
-                String lockName = line.substring(curStart, line.indexOf(':'));
-                String lockMessage = line.substring(curStart); //TODO: what if this has a new line? then we can't use bufferedReader.newLine
-                locks.add(new Lock(lockId, lockName, lockMessage));
-            }
-        } catch (Exception e) {
-            Log.d("exceptions", "file not found");
-        }
+    public static Context getContext() {
+        return CONTEXT;
     }
 
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
@@ -103,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         //Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock", "This is test lock" );
         //List<String> test = new ArrayList<String>();
         //test.add(testlock1.getId());
-        Iterator<Lock> it = locks.iterator();
+        Iterator<Lock> it = lockList.getList().iterator();
         while (it.hasNext()) {
             Lock curLock = it.next();
             listDataHeader.add(curLock.getName());
