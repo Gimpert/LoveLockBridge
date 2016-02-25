@@ -38,8 +38,13 @@ public class LockList {
             while ((line = bufferedReader.readLine()) != null) {
                 int curStart = 0;
                 String lockId = line.substring(curStart, line.indexOf(':'));
-                String lockName = line.substring(curStart, line.indexOf(':'));
+
+                curStart = line.indexOf(':') + 1;//Advance cursor past delimeter
+                String lockName = line.substring(curStart, line.indexOf(curStart, ':'));
+
+                curStart = line.indexOf(curStart, ':') + 1;//Advance cursor past delimeter
                 String lockMessage = line.substring(curStart); //TODO: what if this has a new line? then we can't use bufferedReader.newLine
+
                 locks.add(new Lock(lockId, lockName, lockMessage));
             }
             inputStreamReader.close();
@@ -78,4 +83,5 @@ public class LockList {
 
     public Lock getLock(int position) { return locks.get(position);}
 
+    public void addLock(Lock lock){ locks.add(lock); }
 }
