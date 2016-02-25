@@ -16,7 +16,7 @@ public class LockListTest {
         MainActivity.DEBUG = true;
 
         LockList lockList = new LockList();
-        LockList.DEBUG_STORED_LOCKS_FILENAME = "./../../../../debug/res/testFiles/testLocks";
+        LockList.DEBUG_STORED_LOCKS_FILENAME = "app/src/debug/res/testFiles/testLocks";
         lockList.loadLocks();
         ArrayList<Lock> list = lockList.getList();
 
