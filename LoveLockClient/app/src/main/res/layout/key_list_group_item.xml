@@ -2,14 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/list_item_unexpanded"
     android:padding="@dimen/list_padding">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/key_img"
-        android:src="@drawable/key_img"/>
+        android:src="@drawable/key_img"
+        android:layout_alignBottom="@+id/key_name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/key_name"
@@ -17,33 +20,35 @@
         android:layout_height="wrap_content"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
         android:text="Key"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/unlock"
-        android:id="@+id/unlock_button"
-        android:layout_centerHorizontal="true"
-        android:padding="@dimen/button_padding"
-        android:layout_margin="@dimen/button_margin" />
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/key_img"
+        android:layout_toEndOf="@+id/key_img" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/send_key"
         android:id="@+id/send_button"
-        android:layout_toLeftOf="@id/unlock_button"
         android:padding="@dimen/button_padding"
-        android:layout_margin="@dimen/button_margin" />
+        android:layout_margin="@dimen/button_margin"
+        android:visibility="gone" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unlock"
+        android:id="@+id/unlock_button"
+        android:padding="@dimen/button_padding"
+        android:layout_margin="@dimen/button_margin"
+        android:visibility="gone" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/throw_away_key"
         android:id="@+id/throw_away_button"
-        android:layout_toRightOf="@id/unlock_button"
         android:padding="@dimen/button_padding"
-        android:layout_margin="@dimen/button_margin" />
+        android:layout_margin="@dimen/button_margin"
+        android:visibility="gone" />
 
 </RelativeLayout>

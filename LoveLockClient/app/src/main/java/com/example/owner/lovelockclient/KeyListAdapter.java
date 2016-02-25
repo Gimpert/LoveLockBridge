@@ -1,99 +1,69 @@
 package com.example.owner.lovelockclient;
 
+import android.app.Activity;
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by Owner on 2/16/2016.
  */
-public class KeyListAdapter extends BaseExpandableListAdapter{
+public class KeyListAdapter extends BaseAdapter {
 
     private Context context;
-    private List<String> listDataHeader;
-    private HashMap<String, Lock> listDataChild;
+    private LockList listData;
 
-    public KeyListAdapter(Context context, List<String> listDataHeader, HashMap<String, Lock> listDataChild) {
+    public KeyListAdapter(Context context, LockList listData) {
         this.context = context;
-        this.listDataHeader = listDataHeader;
-        this.listDataChild = listDataChild;
+        this.listData = listData;
+    }
+
+
+    @Override
+    public int getCount() {
+        return listData.getCount();
     }
 
     @Override
-    public int getGroupCount() {
-        return this.listDataHeader.size();
+    public Object getItem(int position) {
+        return listData.getLock(position);
     }
 
     @Override
-    public int getChildrenCount(int groupPosition) {
-        return 1;
-    }
-
-    @Override
-    public Object getGroup(int groupPosition) {
-        return this.listDataHeader.get(groupPosition);
-
-    }
-
-    @Override
-    public Object getChild(int groupPosition, int childPosition) {
-        return this.listDataChild.get(this.listDataHeader.get(groupPosition));
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
     public boolean hasStableIds() {
-        return true;
+        return false;
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
-        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if(convertView == null) {
-            convertView = inflater.inflate(R.layout.key_list_group_item, null);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (view == null){
+            view = inflater.inflate(R.layout.key_list_group_item, parent);
         }
-        TextView keyName = (TextView) convertView.findViewById(R.id.key_name);
-        keyName.setText(headerTitle);
-        return convertView;
+
+        TextView keyName = (TextView) view.findViewById(R.id.key_name);
+        keyName.setText(listData.getLock(position).getName());
+
+        return view;
     }
 
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
-        //final String childText = (String) getChild(groupPosition, childPosition);
-        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (convertView == null){
-            convertView = inflater.inflate(R.layout.key_list_child_item, parent);
-        }
-        Button unlockButton = (Button) convertView.findViewById(R.id.unlock_button);
-        Button sendButton = (Button) convertView.findViewById(R.id.send_button);
-        Button throwButton = (Button) convertView.findViewById(R.id.throw_away_button);
-
-
-        return convertView;
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
-    }
 }

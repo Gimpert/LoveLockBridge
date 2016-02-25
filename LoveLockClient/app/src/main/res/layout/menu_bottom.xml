@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_button_height" />
     <TextView
-        android:id="@+id/tvResponse"
+        android:id="@+id/etResponse"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

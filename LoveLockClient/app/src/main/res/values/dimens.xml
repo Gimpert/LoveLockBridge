@@ -6,4 +6,6 @@
     <dimen name="button_padding">4dp</dimen>
     <dimen name="button_margin">10dp</dimen>
     <dimen name="list_padding">10dp</dimen>
+    <dimen name="list_item_unexpanded">40dp</dimen>
+    <dimen name="list_item_expanded">120dp</dimen>
 </resources>

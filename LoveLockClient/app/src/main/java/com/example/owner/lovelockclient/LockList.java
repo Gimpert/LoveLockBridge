@@ -73,4 +73,9 @@ public class LockList {
     public ArrayList getList() {
         return locks;
     }
+
+    public int getCount(){ return locks.size();}
+
+    public Lock getLock(int position) { return locks.get(position);}
+
 }
