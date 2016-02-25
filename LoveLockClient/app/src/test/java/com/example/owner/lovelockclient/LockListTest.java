@@ -1,9 +1,7 @@
 package com.example.owner.lovelockclient;
-import android.util.Log;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import com.example.owner.bridgecommunication.ServerRelay;
 
 import java.util.ArrayList;
 
@@ -16,7 +14,7 @@ public class LockListTest {
         MainActivity.DEBUG = true;
 
         LockList lockList = new LockList();
-        LockList.DEBUG_STORED_LOCKS_FILENAME = "app/src/debug/res/testFiles/testLocks";
+        LockList.DEBUG_STORED_LOCKS_FILENAME = "app/src/main/res/testLocks";
         lockList.loadLocks();
         ArrayList<Lock> list = lockList.getList();
 

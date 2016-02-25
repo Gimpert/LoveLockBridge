@@ -15,7 +15,7 @@ import java.util.Iterator;
  * Created by Joseph Gregory on 2/23/2016.
  */
 public class LockList {
-    public static String DEBUG_STORED_LOCKS_FILENAME = "app/src/debug/res/testFiles/testLocks";
+    public static String DEBUG_STORED_LOCKS_FILENAME = "app/src/main/res/testLocks";
     public static final String STORED_LOCKS_FILENAME = "locks";
 
     private ArrayList<Lock> locks;
