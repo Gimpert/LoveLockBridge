@@ -15,7 +15,7 @@ import java.util.Iterator;
  * Created by Joseph Gregory on 2/23/2016.
  */
 public class LockList {
-    public static String DEBUG_STORED_LOCKS_FILENAME = "app/src/main/res/testLocks";
+    public static String DEBUG_STORED_LOCKS_FILENAME = "\\app\\src\\main\\res\\testLocks";
     public static final String STORED_LOCKS_FILENAME = "locks";
 
     private ArrayList<Lock> locks;
@@ -28,7 +28,7 @@ public class LockList {
         try {
             FileInputStream in;
             if (MainActivity.DEBUG) {
-                in = new FileInputStream(DEBUG_STORED_LOCKS_FILENAME);
+                in = (FileInputStream) this.getClass().getResourceAsStream(".\\..\\main\\res\\testLocks");//"LoveLockClient\\app\\src\\main\\res\\testLocks");//DEBUG_STORED_LOCKS_FILENAME);
             } else {
                 in = MainActivity.getContext().openFileInput(STORED_LOCKS_FILENAME);
             }
