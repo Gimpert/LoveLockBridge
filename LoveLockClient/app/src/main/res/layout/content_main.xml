@@ -7,9 +7,7 @@
     tools:context="com.example.owner.lovelockclient.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <include layout="@layout/key_list"
-        android:id="@+id/key_list"
-        />
+
     <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -18,7 +16,6 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
-        android:layout_above="@id/key_list"
         >
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -40,6 +37,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
+    <ListView
+        android:id="@+id/keys_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
 </android.support.design.widget.CoordinatorLayout>

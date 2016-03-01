@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
+    android:id="@+id/key_group"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/list_item_unexpanded"
+    android:layout_height="@dimen/list_item_expanded"
     android:padding="@dimen/list_padding">
 
     <ImageView
@@ -24,14 +25,7 @@
         android:layout_toRightOf="@+id/key_img"
         android:layout_toEndOf="@+id/key_img" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/send_key"
-        android:id="@+id/send_button"
-        android:padding="@dimen/button_padding"
-        android:layout_margin="@dimen/button_margin"
-        android:visibility="gone" />
+
 
     <Button
         android:layout_width="wrap_content"
@@ -39,8 +33,19 @@
         android:text="@string/unlock"
         android:id="@+id/unlock_button"
         android:padding="@dimen/button_padding"
-        android:layout_margin="@dimen/button_margin"
-        android:visibility="gone" />
+        android:visibility="visible"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_key"
+        android:id="@+id/send_button"
+        android:padding="@dimen/button_padding"
+        android:visibility="visible"
+        android:layout_alignTop="@+id/unlock_button"
+        android:layout_toLeftOf="@+id/unlock_button"
+        android:layout_toStartOf="@+id/unlock_button" />
 
     <Button
         android:layout_width="wrap_content"
@@ -48,7 +53,9 @@
         android:text="@string/throw_away_key"
         android:id="@+id/throw_away_button"
         android:padding="@dimen/button_padding"
-        android:layout_margin="@dimen/button_margin"
-        android:visibility="gone" />
+        android:visibility="visible"
+        android:layout_alignTop="@+id/unlock_button"
+        android:layout_toRightOf="@+id/unlock_button"
+        android:layout_toEndOf="@+id/unlock_button" />
 
 </RelativeLayout>

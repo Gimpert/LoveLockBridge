@@ -6,6 +6,7 @@ import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.Button;
@@ -20,48 +21,30 @@ import java.util.List;
 /**
  * Created by Owner on 2/16/2016.
  */
-public class KeyListAdapter extends BaseAdapter {
+public class KeyListAdapter extends ArrayAdapter<Lock> {
 
-    private Context context;
-    private LockList listData;
 
-    public KeyListAdapter(Context context, LockList listData) {
-        this.context = context;
-        this.listData = listData;
+
+
+    public KeyListAdapter(Context context, ArrayList<Lock> listData) {
+        super(context, R.layout.key_list_group_item, listData);
     }
 
 
-    @Override
-    public int getCount() {
-        return listData.getCount();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return listData.getLock(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Lock lock = getItem(position);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         if (view == null){
-            view = inflater.inflate(R.layout.key_list_group_item, parent);
+            view = inflater.inflate(R.layout.key_list_group_item, parent, false);
+            view.setMinimumHeight(R.dimen.list_item_unexpanded);
+
         }
 
         TextView keyName = (TextView) view.findViewById(R.id.key_name);
-        keyName.setText(listData.getLock(position).getName());
+        keyName.setText(lock.getName());
 
         return view;
     }

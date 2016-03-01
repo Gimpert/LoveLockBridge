@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -28,8 +31,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,13 +66,37 @@ public class MainActivity extends AppCompatActivity {
 
 
         keyListView = (ListView) findViewById(R.id.keys_list);
+        keyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if(findViewById(R.id.throw_away_button).getVisibility()  == View.GONE){
+                    view.findViewById(R.id.send_button).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.unlock_button).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.throw_away_button).setVisibility(View.VISIBLE);
+
+                } else if(findViewById(R.id.throw_away_button).getVisibility()  == View.VISIBLE) {
+                    view.findViewById(R.id.send_button).setVisibility(View.GONE);
+                    view.findViewById(R.id.unlock_button).setVisibility(View.GONE);
+                    view.findViewById(R.id.throw_away_button).setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+
+
 
         lockList = new LockList();
         lockList.loadLocks();
+        prepareListData();
+
+
+
 
 
         //prepareListData();
-        listAdapter = new KeyListAdapter(this, lockList);
+        listAdapter = new KeyListAdapter(this, lockList.getList());
 
 
 
@@ -93,24 +122,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private void prepareListData() {
-//        listDataHeader = new ArrayList<String>();
-//        listDataChild = new HashMap<String, Lock>();
-//
-//        //Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock", "This is test lock" );
-//        //List<String> test = new ArrayList<String>();
-//        //test.add(testlock1.getId());
+    private void prepareListData() {
+
 //        Iterator<Lock> it = lockList.getList().iterator();
 //        while (it.hasNext()) {
 //            Lock curLock = it.next();
-//            listDataHeader.add(curLock.getName());
-//            listDataChild.put(curLock.getName(), curLock);
+//            lockList.addLock(it.next());
+//
 //        }
-//        //listDataHeader.add(testlock1.getName());
-//        //listDataChild.put(listDataHeader.get(0), testlock1);
-//
-//
-//    }
+        Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock1", "This is test lock" );
+        Lock testlock2 = new Lock("56b3c3d5650066a9ec89cc76", "testLock2", "This is another test lock" );
+        Lock testlock3 = new Lock("56b3c3d5650066a9ec89cc76", "testLock3", "This is another test lock" );
+        Lock testlock4 = new Lock("56b3c3d5650066a9ec89cc76", "testLock4", "This is another test lock" );
+        Lock testlock5 = new Lock("56b3c3d5650066a9ec89cc76", "testLock5", "This is another test lock" );
+        Lock testlock6 = new Lock("56b3c3d5650066a9ec89cc76", "testLock6", "This is another test lock" );
+        Lock testlock7 = new Lock("56b3c3d5650066a9ec89cc76", "testLock7", "This is another test lock" );
+        Lock testlock8 = new Lock("56b3c3d5650066a9ec89cc76", "testLock8", "This is another test lock" );
+        Lock testlock9 = new Lock("56b3c3d5650066a9ec89cc76", "testLock9", "This is another test lock" );
+        Lock testlock10 = new Lock("56b3c3d5650066a9ec89cc76", "testLock10", "This is another test lock" );
+        Lock testlock11 = new Lock("56b3c3d5650066a9ec89cc76", "testLock11", "This is another test lock" );
+        Lock testlock12 = new Lock("56b3c3d5650066a9ec89cc76", "testLock12", "This is another test lock" );
+        lockList.addLock(testlock1);
+        lockList.addLock(testlock2);
+        lockList.addLock(testlock3);
+        lockList.addLock(testlock4);
+        lockList.addLock(testlock5);
+        lockList.addLock(testlock6);
+        lockList.addLock(testlock7);
+        lockList.addLock(testlock8);
+        lockList.addLock(testlock9);
+        lockList.addLock(testlock10);
+        lockList.addLock(testlock11);
+        lockList.addLock(testlock12);
+
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
