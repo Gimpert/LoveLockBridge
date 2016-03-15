@@ -20,7 +20,7 @@ public class ServerRelay {
         this.URL = URL;
     }
 
-    public String sendToServer(String urlParameters) {
+    public String sendGetToServer(String urlParameters) {
         HttpURLConnection conn = null;
         try {
             //Create connection
@@ -65,6 +65,10 @@ public class ServerRelay {
                 conn.disconnect();
             }
         }
+    }
+
+    public String sendPostToServer(String urlParameters) {
+        return null;
     }
 
     public String getURL() {

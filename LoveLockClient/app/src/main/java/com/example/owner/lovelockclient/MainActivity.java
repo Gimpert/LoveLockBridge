@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            return serverRelay.sendToServer(serverRelay.getURL());
+            return serverRelay.sendGetToServer(serverRelay.getURL());
 
         }
         protected void onPostExecute(String result){
