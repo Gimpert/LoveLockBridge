@@ -7,6 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.owner.lovelockclient.MainActivity"
 
+
     >
 <RelativeLayout
     android:layout_width="match_parent"

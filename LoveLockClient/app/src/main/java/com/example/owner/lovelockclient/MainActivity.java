@@ -36,6 +36,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public static boolean DEBUG = false; //TODO: remove all debug functionality for final product
@@ -66,25 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         keyListView = (ListView) findViewById(R.id.keys_list);
-        keyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if(findViewById(R.id.throw_away_button).getVisibility()  == View.GONE){
-                    view.findViewById(R.id.send_button).setVisibility(View.VISIBLE);
-                    view.findViewById(R.id.unlock_button).setVisibility(View.VISIBLE);
-                    view.findViewById(R.id.throw_away_button).setVisibility(View.VISIBLE);
-
-                } else if(findViewById(R.id.throw_away_button).getVisibility()  == View.VISIBLE) {
-                    view.findViewById(R.id.send_button).setVisibility(View.GONE);
-                    view.findViewById(R.id.unlock_button).setVisibility(View.GONE);
-                    view.findViewById(R.id.throw_away_button).setVisibility(View.GONE);
-                }
-            }
-        });
-
-
-
 
 
         lockList = new LockList();
@@ -101,6 +83,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         keyListView.setAdapter(listAdapter);
+        keyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String testToast = ((Lock) keyListView.getItemAtPosition(position)).getName();
+                Toast.makeText(MainActivity.this, testToast, Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 
@@ -130,11 +119,11 @@ public class MainActivity extends AppCompatActivity {
 //            lockList.addLock(it.next());
 //
 //        }
-        Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock1", "This is test lock" );
-        Lock testlock2 = new Lock("56b3c3d5650066a9ec89cc76", "testLock2", "This is another test lock" );
-        Lock testlock3 = new Lock("56b3c3d5650066a9ec89cc76", "testLock3", "This is another test lock" );
-        Lock testlock4 = new Lock("56b3c3d5650066a9ec89cc76", "testLock4", "This is another test lock" );
-        Lock testlock5 = new Lock("56b3c3d5650066a9ec89cc76", "testLock5", "This is another test lock" );
+        Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock1", "This is a test lock." );
+        Lock testlock2 = new Lock("56b3c3d5650066a9ec89cc76", "testLock2", "This is another test lock." );
+        Lock testlock3 = new Lock("56b3c3d5650066a9ec89cc76", "testLock3", "This is another test lock, but it has a longer message.");
+        Lock testlock4 = new Lock("56b3c3d5650066a9ec89cc76", "testLock4", "This is another test lock, but it has a much longer message. Seriously, this lock's message is pretty long. At least a couple lines." );
+        Lock testlock5 = new Lock("56b3c3d5650066a9ec89cc76", "testLock5");
         Lock testlock6 = new Lock("56b3c3d5650066a9ec89cc76", "testLock6", "This is another test lock" );
         Lock testlock7 = new Lock("56b3c3d5650066a9ec89cc76", "testLock7", "This is another test lock" );
         Lock testlock8 = new Lock("56b3c3d5650066a9ec89cc76", "testLock8", "This is another test lock" );

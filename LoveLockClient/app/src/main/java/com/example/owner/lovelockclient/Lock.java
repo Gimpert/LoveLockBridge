@@ -22,12 +22,20 @@ public class Lock implements Serializable {
     /**
      * The message contained within the lock
      */
-    protected String message;
+    protected String message = null;
+
+    protected Boolean isExpanded;
+
+    public Lock(String id, String name){
+        this.id = id;
+        this.name = name;
+    }
 
     public Lock(String id, String name, String message) {
         this.id = id;
         this.name = name;
         this.message = message;
+        this.isExpanded = true;
     }
 
     public String getMessage() {

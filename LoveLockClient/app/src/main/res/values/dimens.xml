@@ -2,10 +2,11 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="bottom_button_height">30dp</dimen>
+    <dimen name="bottom_button_height">40dp</dimen>
     <dimen name="button_padding">4dp</dimen>
     <dimen name="button_margin">10dp</dimen>
     <dimen name="list_padding">10dp</dimen>
     <dimen name="list_item_unexpanded">40dp</dimen>
     <dimen name="list_item_expanded">120dp</dimen>
+    <dimen name="message_popup_width">300dp</dimen>
 </resources>
