@@ -84,7 +84,7 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
 
         @Override
         protected String doInBackground(String... params) {
-            return serverRelay.sendToServer(serverRelay.getURL());
+            return serverRelay.sendGetToServer("");
 
         }
         protected void onPostExecute(String result){

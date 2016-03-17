@@ -39,7 +39,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    public static boolean DEBUG = false; //TODO: remove all debug functionality for final product
     private static Context CONTEXT;
 
     KeyListAdapter listAdapter;

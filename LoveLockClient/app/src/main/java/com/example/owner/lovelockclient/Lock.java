@@ -11,10 +11,16 @@ public class Lock implements Serializable {
 
 
     /**
-     * The unique ID for the lock.
+     * The unique ID for the lock, generated from the MongoDB.
      * Represents the "key" for the lock
      */
     protected String id;
+
+    /**
+     * The password that changes whenever a key is transfered,
+     * changing ownership of the key.
+     */
+    protected String password;
     /**
      * The name of the lock
      */
@@ -38,6 +44,14 @@ public class Lock implements Serializable {
         this.isExpanded = true;
     }
 
+    public Lock(String id, String name, String message, String password) {
+        this.id = id;
+        this.name = name;
+        this.message = message;
+        this.password = password;
+        this.isExpanded = true;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -45,6 +59,7 @@ public class Lock implements Serializable {
     public void setMessage(String message) {
         this.message = message;
     }
+
     public String getId() {
         return id;
     }
@@ -61,6 +76,11 @@ public class Lock implements Serializable {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
 
-
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

@@ -27,11 +27,8 @@ public class LockList {
     public void loadLocks() {
         try {
             FileInputStream in;
-            if (MainActivity.DEBUG) {
-                in = (FileInputStream) this.getClass().getResourceAsStream(".\\..\\main\\res\\testLocks");//"LoveLockClient\\app\\src\\main\\res\\testLocks");//DEBUG_STORED_LOCKS_FILENAME);
-            } else {
-                in = MainActivity.getContext().openFileInput(STORED_LOCKS_FILENAME);
-            }
+            in = MainActivity.getContext().openFileInput(STORED_LOCKS_FILENAME);
+
             InputStreamReader inputStreamReader = new InputStreamReader(in);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String line;
@@ -49,7 +46,7 @@ public class LockList {
             }
             inputStreamReader.close();
         } catch (Exception e) {
-            MainActivity.DEBUG = true; //TODO: delete this line
+
             //Log.d("exceptions", e.getStackTrace().toString());
         }
     }
@@ -57,11 +54,7 @@ public class LockList {
     public void saveLocks() {
         try {
             FileOutputStream out;
-            if (MainActivity.DEBUG) {
-                out = new FileOutputStream(DEBUG_STORED_LOCKS_FILENAME, false);//openFileOutput(DEBUG_STORED_LOCKS_FILENAME, Context.MODE_PRIVATE);
-            } else {
-                out = MainActivity.getContext().openFileOutput(STORED_LOCKS_FILENAME, Context.MODE_PRIVATE);
-            }
+            out = MainActivity.getContext().openFileOutput(STORED_LOCKS_FILENAME, Context.MODE_PRIVATE);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(out);
 
             Iterator<Lock> it = locks.iterator();
@@ -69,6 +62,7 @@ public class LockList {
                 Lock lock = it.next();
                 outputStreamWriter.write(lock.getId() + ":" + lock.getName() + ":" + lock.getMessage() + "\n");
             }
+
             outputStreamWriter.close();
         } catch (Exception e) {
             //Log.d("exceptions", e.getStackTrace().toString());
