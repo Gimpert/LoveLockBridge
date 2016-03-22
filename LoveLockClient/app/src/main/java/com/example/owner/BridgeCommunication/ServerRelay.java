@@ -12,18 +12,12 @@ import java.net.URL;
  */
 public class ServerRelay {
     public static final String DEFAULT_URL = "http://152.14.106.21:3000";
-    private String URL;
-    public ServerRelay() {
-        this(DEFAULT_URL);
-    }
-    public ServerRelay(String URL) {
-        this.URL = URL;
-    }
+    private static String URL = DEFAULT_URL;
 
     /**
      * @return the lock's hidden message
      */
-    public String unlockLock(String lockId, String latitude, String longitude, String lockPswd) {
+    public static String unlockLock(String lockId, String latitude, String longitude, String lockPswd) {
         String urlParams = "/openLock?id=" + lockId + "&lat=" + latitude + "&lng=" + longitude + "&pswd=" + lockPswd;
         return sendGetToServer(urlParams);
     }
@@ -31,13 +25,13 @@ public class ServerRelay {
     /**
      * @return a string that contains the lock password and id formatted as "pass:id"
      */
-    public String addLock(String lockName, String latitude, String longitude, String lockMessage) {
+    public static String addLock(String lockName, String latitude, String longitude, String lockMessage) {
         String urlParams = "/addLock";
         String bodyParams = "lat=" + latitude + "&lng=" + longitude + "&message=" + lockMessage + "%20method&name=" + lockName;
         return sendPostToServer(urlParams, bodyParams);
     }
 
-    public void sendLock(String lockName, String latitude, String longitude, String lockId, String recipientEmailAddress, String sendString) {
+    public static void sendKey(String lockName, String latitude, String longitude, String lockId, String recipientEmailAddress, String sendString) {
         
     }
 
@@ -49,7 +43,7 @@ public class ServerRelay {
         return false;
     }
 
-    public String sendGetToServer(String urlParameters) {
+    public static String sendGetToServer(String urlParameters) {
         HttpURLConnection conn = null;
         try {
             //Create connection
@@ -94,7 +88,7 @@ public class ServerRelay {
         }
     }
 
-    public String sendPostToServer(String urlParameters, String bodyParameters) {
+    public static String sendPostToServer(String urlParameters, String bodyParameters) {
         HttpURLConnection conn = null;
         try {
             //Create connection
@@ -140,12 +134,12 @@ public class ServerRelay {
         }
     }
 
-    public String getURL() {
+    public static String getURL() {
         return URL;
     }
 
-    public void setURL(String URL) {
-        this.URL = URL;
+    public static void setURL(String newURL) {
+        URL = newURL;
     }
 
 

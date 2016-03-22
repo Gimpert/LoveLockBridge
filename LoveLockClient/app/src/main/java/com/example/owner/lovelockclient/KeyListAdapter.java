@@ -23,11 +23,13 @@ import com.example.owner.BridgeCommunication.ServerRelay;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Owner on 2/16/2016.
  */
 public class KeyListAdapter extends ArrayAdapter<Lock> {
+    static final String NO_LOCK_MESSAGE = "You are not in range of a bridge.";
     ServerRelay serverRelay;
     ResponseParser responseParser;
 
@@ -69,14 +71,29 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                 popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 
                 message_name.setText(lock.getName());
-                if(lock.getMessage() != null) {
+                if (lock.getMessage() != null) {
                     message_body.setText(lock.getMessage());
 
                     popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
-                }else {
-                    HttpAsyncTask httpAsyncTask = new HttpAsyncTask("","",lock);
+                } else {
+                    HttpAsyncTask httpAsyncTask = new HttpAsyncTask("", "", lock);
                     httpAsyncTask.execute();
-                    message_body.setText(lock.getMessage());
+
+                    String message;
+                    try {
+                        message = responseParser.parseMessage(httpAsyncTask.get());
+                        lock.setMessage(message);
+                    } catch (Exception e) {
+                        message = null;
+                    }
+
+
+                    if (message == null) {
+                        message_body.setText(NO_LOCK_MESSAGE);
+                    } else {
+                        message_body.setText(message);
+                    }
+
                     popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
                 }
             }
