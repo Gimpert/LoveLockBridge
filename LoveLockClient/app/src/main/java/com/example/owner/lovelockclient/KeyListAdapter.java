@@ -17,6 +17,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.owner.BridgeCommunication.ResponseParser;
 import com.example.owner.BridgeCommunication.ServerRelay;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.List;
  */
 public class KeyListAdapter extends ArrayAdapter<Lock> {
     ServerRelay serverRelay;
+    ResponseParser responseParser;
 
 
     private ArrayList<Lock> listData;
@@ -35,6 +37,7 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
         super(context, R.layout.key_list_group_item, listData);
         this.listData = listData;
         serverRelay = new ServerRelay();
+        responseParser = new ResponseParser();
 
     }
 
@@ -71,7 +74,9 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
 
                     popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
                 }else {
-                    new HttpAsyncTask().execute(serverRelay.getURL());
+                    HttpAsyncTask httpAsyncTask = new HttpAsyncTask("","",lock);
+                    httpAsyncTask.execute();
+                    message_body.setText(lock.getMessage());
                     popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
                 }
             }
@@ -82,13 +87,23 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
     }
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
 
+        private String lat,lng;
+        private Lock lock;
+
+        public HttpAsyncTask(String lat, String lng, Lock lock){
+            this.lat = lat;
+            this.lng = lng;
+            this.lock = lock;
+        }
+
+
         @Override
         protected String doInBackground(String... params) {
-            return serverRelay.sendGetToServer("");
+            return serverRelay.unlockLock(lock.getId(), lat, lng, lock.getPassword());
 
         }
         protected void onPostExecute(String result){
-
+            lock.setMessage(responseParser.parseMessage(result));
         }
     }
 }

@@ -1,31 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.example.owner.lovelockclient.MainActivity"
-
-
     >
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <include layout="@layout/menu_bottom"
-        android:id="@+id/menu_bottom"
-        />
-
-    <include layout="@layout/content_main"
-        android:id="@+id/content_main"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/menu_bottom"
-        />
+        >
+        <include layout="@layout/menu_bottom"
+            android:id="@+id/menu_bottom"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            />
 
-</RelativeLayout>
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/menu_bottom"
+            >
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/app_bar"
+                android:theme="@style/AppTheme.AppBarOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
 
 
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        app:layout_collapseMode="pin"
+                        app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+            </android.support.design.widget.AppBarLayout>
+
+            <include layout="@layout/content_main"
+                android:id="@+id/content_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                />
+
+
+        </android.support.design.widget.CoordinatorLayout>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

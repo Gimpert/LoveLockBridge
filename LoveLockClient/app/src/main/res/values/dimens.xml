@@ -9,4 +9,5 @@
     <dimen name="list_item_unexpanded">40dp</dimen>
     <dimen name="list_item_expanded">120dp</dimen>
     <dimen name="message_popup_width">300dp</dimen>
+    <dimen name="message_popup_padding">20dp</dimen>
 </resources>
