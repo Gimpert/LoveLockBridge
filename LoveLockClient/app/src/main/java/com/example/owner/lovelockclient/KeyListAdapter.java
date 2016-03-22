@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.owner.BridgeCommunication.ResponseParser;
 import com.example.owner.BridgeCommunication.ServerRelay;
@@ -61,6 +62,26 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
         Button throw_button = (Button) view.findViewById(R.id.throw_away_button);
         keyName.setText(lock.getName());
 
+        send_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        throw_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LockList.getInstance().removeLock(lock);
+                listData.remove(lock);
+                notifyDataSetChanged();
+                //Toast.makeText(MainActivity.getContext(), )
+                //TODO create toast to notify user
+            }
+        });
+
+
+
         unlock_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,8 +91,10 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                 popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 
-                message_name.setText(lock.getName());
+                message_name.setTextSize(20);
+                String headerMessage = "Message from " + lock.getName();
                 if (lock.getMessage() != null) {
+                    message_name.setText(headerMessage);
                     message_body.setText(lock.getMessage());
 
                     popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
@@ -87,10 +110,11 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                         message = null;
                     }
 
-
                     if (message == null) {
-                        message_body.setText(NO_LOCK_MESSAGE);
+                        message_name.setText(NO_LOCK_MESSAGE);
+                        message_body.setText("");
                     } else {
+                        message_name.setText(headerMessage);
                         message_body.setText(message);
                     }
 

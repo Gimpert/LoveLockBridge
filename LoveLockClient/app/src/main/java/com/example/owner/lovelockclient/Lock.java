@@ -37,10 +37,10 @@ public class Lock implements Serializable {
         this.name = name;
     }
 
-    public Lock(String id, String name, String message) {
+    public Lock(String id, String name, String password) {
         this.id = id;
         this.name = name;
-        this.message = message;
+        this.password = password;
         this.isExpanded = true;
     }
 

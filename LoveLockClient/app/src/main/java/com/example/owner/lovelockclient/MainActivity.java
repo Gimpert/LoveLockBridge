@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         keyListView = (ListView) findViewById(R.id.key_list_view);
 
 
-        lockList = new LockList();
+        lockList = LockList.getInstance();
         lockList.loadLocks();
         prepareListData();
 
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 //            lockList.addLock(it.next());
 //
 //        }
-        Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock1", "This is a test lock." );
+        Lock testlock1 = new Lock("56eadde0ce93f260099b8d39", "testLock", "zO1ZsGJL" );
         Lock testlock2 = new Lock("56b3c3d5650066a9ec89cc76", "testLock2", "This is another test lock." );
         Lock testlock3 = new Lock("56b3c3d5650066a9ec89cc76", "testLock3", "This is another test lock, but it has a longer message.");
         Lock testlock4 = new Lock("56b3c3d5650066a9ec89cc76", "testLock4", "This is another test lock, but it has a much longer message. Seriously, this lock's message is pretty long. At least a couple lines." );

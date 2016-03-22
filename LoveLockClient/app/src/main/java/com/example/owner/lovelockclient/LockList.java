@@ -17,11 +17,20 @@ import java.util.Iterator;
 public class LockList {
     public static String DEBUG_STORED_LOCKS_FILENAME = "\\app\\src\\main\\res\\testLocks";
     public static final String STORED_LOCKS_FILENAME = "locks";
+    private static LockList instance;
 
     private ArrayList<Lock> locks;
 
-    public LockList () {
+    private LockList () {
         locks = new ArrayList<Lock>();
+    }
+
+    public static LockList getInstance() {
+        if (instance != null) {
+            return instance;
+        } else {
+            return instance = new LockList();
+        }
     }
 
     public void loadLocks() {
@@ -78,4 +87,6 @@ public class LockList {
     public Lock getLock(int position) { return locks.get(position);}
 
     public void addLock(Lock lock){ locks.add(lock); }
+
+    public void removeLock(Lock lock) {locks.remove(lock); }
 }
