@@ -25,8 +25,6 @@ public class ServerRelay {
      */
     public String unlockLock(String lockId, String latitude, String longitude, String lockPswd) {
         String urlParams = "/openLock?id=" + lockId + "&lat=" + latitude + "&lng=" + longitude + "&pswd=" + lockPswd;
-        //String resp = sendGetToServer(urlParams);
-        //String message = resp.substring(resp.indexOf(":") + 1, );
         return sendGetToServer(urlParams);
     }
 
@@ -40,7 +38,7 @@ public class ServerRelay {
     }
 
     public void sendLock(String lockName, String latitude, String longitude, String lockId, String recipientEmailAddress, String sendString) {
-
+        
     }
 
     public boolean isInBridgeRange(String latitude, String longitude) {
