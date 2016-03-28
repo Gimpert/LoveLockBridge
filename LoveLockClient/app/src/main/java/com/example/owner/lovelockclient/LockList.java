@@ -17,7 +17,8 @@ import java.util.Iterator;
 public class LockList {
     public static String DEBUG_STORED_LOCKS_FILENAME = "\\app\\src\\main\\res\\testLocks";
     public static final String STORED_LOCKS_FILENAME = "locks";
-    private static LockList instance;
+
+    private static LockList instance = null;
 
     private ArrayList<Lock> locks;
 

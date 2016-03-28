@@ -3,6 +3,7 @@ package com.example.owner.lovelockclient;
 import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,7 +32,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class KeyListAdapter extends ArrayAdapter<Lock> {
     static final String NO_LOCK_MESSAGE = "You are not in range of a bridge.";
-    ServerRelay serverRelay;
+    static final String NO_LOCATION = "Loction Unknown.";
     ResponseParser responseParser;
 
 
@@ -39,7 +40,6 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
     public KeyListAdapter(Context context, ArrayList<Lock> listData) {
         super(context, R.layout.key_list_group_item, listData);
         this.listData = listData;
-        serverRelay = new ServerRelay();
         responseParser = new ResponseParser();
 
     }
@@ -99,23 +99,29 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
 
                     popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
                 } else {
-                    HttpAsyncTask httpAsyncTask = new HttpAsyncTask("", "", lock);
-                    httpAsyncTask.execute();
+                    Location currentLoction = BridgeProximity.getInstance().getCurrentlocation();
+                    if (currentLoction != null) {
 
-                    String message;
-                    try {
-                        message = responseParser.parseMessage(httpAsyncTask.get());
-                        lock.setMessage(message);
-                    } catch (Exception e) {
-                        message = null;
-                    }
+                        HttpAsyncTask httpAsyncTask = new HttpAsyncTask("" + currentLoction.getLatitude(), "" + currentLoction.getLongitude(), lock);
+                        httpAsyncTask.execute();
 
-                    if (message == null) {
-                        message_name.setText(NO_LOCK_MESSAGE);
-                        message_body.setText("");
+                        String message;
+                        try {
+                            message = responseParser.parseMessage(httpAsyncTask.get());
+                            lock.setMessage(message);
+                        } catch (Exception e) {
+                            message = null;
+                        }
+
+                        if (message == null) {
+                            message_name.setText(NO_LOCK_MESSAGE);
+                            message_body.setText("");
+                        } else {
+                            message_name.setText(headerMessage);
+                            message_body.setText(message);
+                        }
                     } else {
-                        message_name.setText(headerMessage);
-                        message_body.setText(message);
+                        message_name.setText(NO_LOCATION);
                     }
 
                     popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
@@ -140,7 +146,7 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
 
         @Override
         protected String doInBackground(String... params) {
-            return serverRelay.unlockLock(lock.getId(), lat, lng, lock.getPassword());
+            return ServerRelay.unlockLock(lock.getId(), lat, lng, lock.getPassword());
 
         }
         protected void onPostExecute(String result){

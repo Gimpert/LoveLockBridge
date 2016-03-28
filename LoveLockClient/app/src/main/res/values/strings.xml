@@ -4,7 +4,7 @@
     <string name="send_key">Send</string>
     <string name="unlock">Unlock</string>
     <string name="create">Create New Lock</string>
-    <string name="go_bridge">Go to Bridge</string>
+    <string name="add_lock">Add Lock To List</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

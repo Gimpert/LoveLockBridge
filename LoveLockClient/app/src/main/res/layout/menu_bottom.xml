@@ -17,7 +17,7 @@
         android:id="@+id/bridge_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_button_height"
-        android:text="@string/go_bridge"/>
+        android:text="@string/add_lock"/>
     <TextView
         android:id="@+id/etResponse"
         android:layout_width="match_parent"
