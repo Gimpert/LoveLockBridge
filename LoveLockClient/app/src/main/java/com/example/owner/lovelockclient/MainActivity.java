@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Lock testlock2 = new Lock("56b3c3d5650066a9ec89cc76", "testLock2", "zO1ZsGJL", "This is another test lock." );
         Lock testlock3 = new Lock("56b3c3d5650066a9ec89cc76", "testLock3", "zO1ZsGJL", "This is another test lock, but it has a longer message.");
         Lock testlock4 = new Lock("56b3c3d5650066a9ec89cc76", "testLock4", "zO1ZsGJL", "This is another test lock, but it has a much longer message. Seriously, this lock's message is pretty long. At least a couple lines." );
-        Lock testlock5 = new Lock("56eadde0ce93f260099b8d39", "testLock5", "zO1ZsGJL");
+        Lock testlock5 = new Lock("56eadde0ce93f260099b8d39", "unlockTestLock5", "zO1ZsGJL");
         Lock testlock6 = new Lock("56b3c3d5650066a9ec89cc76", "testLock6", "zO1ZsGJL", "This is another test lock" );
         Lock testlock7 = new Lock("56b3c3d5650066a9ec89cc76", "testLock7", "zO1ZsGJL", "This is another test lock" );
         Lock testlock8 = new Lock("56b3c3d5650066a9ec89cc76", "testLock8", "zO1ZsGJL", "This is another test lock" );
