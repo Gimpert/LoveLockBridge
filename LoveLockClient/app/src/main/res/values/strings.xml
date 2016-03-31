@@ -4,7 +4,12 @@
     <string name="send_key">Send</string>
     <string name="unlock">Unlock</string>
     <string name="create">Create New Lock</string>
-    <string name="go_bridge">Go to Bridge</string>
+    <string name="add_lock">Add Lock To List</string>
+    <string name="add_submit"> Create</string>
+    <string name="lock_message">Lock Message: </string>
+    <string name="lock_name">Lock Name:</string>
+    <string name="google_app_id">486559905062-2d4ot83dvqamn4kvr2o23nlj9h6v4m19.apps.googleusercontent.com</string>
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
