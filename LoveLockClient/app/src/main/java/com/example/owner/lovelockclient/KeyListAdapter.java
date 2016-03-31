@@ -75,7 +75,7 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                 LockList.getInstance().removeLock(lock);
                 listData.remove(lock);
                 notifyDataSetChanged();
-                //Toast.makeText(MainActivity.getContext(), )
+                Toast.makeText(MainActivity.getContext(), "Removed " + lock.getName(), Toast.LENGTH_SHORT).show();
                 //TODO create toast to notify user
             }
         });

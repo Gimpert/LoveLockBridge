@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     KeyListAdapter listAdapter;
     ListView keyListView;
 
-
     TextView etResponse;
     ServerRelay serverRelay;
     LockList lockList;
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void prepareListData() {
+    public void prepareListData() {
 
 //        Iterator<Lock> it = lockList.getList().iterator();
 //        while (it.hasNext()) {

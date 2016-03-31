@@ -39,7 +39,7 @@ public class LockListTest extends ApplicationTestCase<Application> {
 //    }
 
     public void testSaveLocks() {
-        LockList lockList = new LockList();
+        LockList lockList = LockList.getInstance();
         lockList.addLock(new Lock("324k","Lock 1","This is the secret message"));
         lockList.addLock(new Lock("23%#@#","Lock 2","secret message of lock 2"));
         lockList.saveLocks();
