@@ -36,10 +36,8 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
     ResponseParser responseParser;
 
 
-    private ArrayList<Lock> listData;
-    public KeyListAdapter(Context context, ArrayList<Lock> listData) {
-        super(context, R.layout.key_list_group_item, listData);
-        this.listData = listData;
+    public KeyListAdapter(Context context) {
+        super(context, R.layout.key_list_group_item, LockList.getInstance().getList());
         responseParser = new ResponseParser();
 
     }
@@ -73,7 +71,7 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
             @Override
             public void onClick(View v) {
                 LockList.getInstance().removeLock(lock);
-                listData.remove(lock);
+                LockList.getInstance().getList().remove(lock);
                 notifyDataSetChanged();
                 Toast.makeText(MainActivity.getContext(), "Removed " + lock.getName(), Toast.LENGTH_SHORT).show();
                 //TODO create toast to notify user

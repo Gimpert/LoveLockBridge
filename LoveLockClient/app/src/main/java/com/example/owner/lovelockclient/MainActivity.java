@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //Initialize the listview displaying the user's locks
         keyListView = (ListView) findViewById(R.id.key_list_view);
-        listAdapter = new KeyListAdapter(this, lockList.getList());
+        listAdapter = new KeyListAdapter(this);
 
         keyListView.setAdapter(listAdapter);
 
@@ -95,6 +95,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+    }
+
+    protected void onPause() {
+        super.onPause();
+        LockList.getInstance().saveLocks();
     }
 
     @Override
