@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:id="@+id/add_lock"
+    android:id="@+id/add_lock_form"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
@@ -20,7 +20,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/lock_name_form"
         android:background="#FFFFFF"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.10" />
@@ -36,7 +36,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/lock_message_form"
         android:background="#FFFFFF"
         android:layout_weight="0.80" />
 
@@ -44,5 +44,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_submit"
-        android:id="@+id/button" />
+        android:id="@+id/add_submit_button" />
 </LinearLayout>

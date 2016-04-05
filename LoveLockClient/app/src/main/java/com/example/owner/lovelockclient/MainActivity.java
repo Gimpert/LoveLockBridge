@@ -10,11 +10,16 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.example.owner.BridgeCommunication.ResponseParser;
 import com.example.owner.BridgeCommunication.ServerRelay;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,7 +30,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,18 +48,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private LocationRequest mLocationRequest;
 
     private static int UPDATE_INTERVAL = 10000,FATEST_INTERVAL = 5000, DISPLACEMENT = 0;
-
+    private static final int PROXIMITY_CHECK = 0, ADD_LOCK = 1;
     private static final int REQUEST_LOCATION = 0;
 
     TextView etResponse;
     LockList lockList;
     //String response;
+    Button attachButton;
+    Button attachSubmitButton;
+    ResponseParser responseParser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         CONTEXT = this;
-
+        responseParser = new ResponseParser();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,6 +80,36 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //TODO: debug functionality, remove later
         etResponse = (TextView) findViewById(R.id.etResponse);
+
+
+        final LayoutInflater inflater = LayoutInflater.from(this);
+
+        //Retrieve attach button
+        attachButton = (Button) findViewById(R.id.attach_button);
+        attachButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final View popupView = inflater.inflate(R.layout.add_lock_popup, null, false );
+                final PopupWindow popupWindow = new PopupWindow(popupView, 1, 1, true );
+                final EditText etLockName = (EditText) popupView.findViewById(R.id.lock_name_form);
+                final EditText etLockMessage = (EditText) popupView.findViewById(R.id.lock_message_form);
+                popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+                popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+
+
+                popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
+
+                attachSubmitButton = (Button) popupView.findViewById(R.id.add_submit_button);
+                attachSubmitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new HttpAsyncTask(etLockName.getText(), etLockMessage.getText(), ADD_LOCK).execute();
+                        popupWindow.dismiss();
+                    }
+                });
+            }
+        });
+
 
 
         //Initialize the Location Service
@@ -152,18 +193,47 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
-    //If the current location is not null, executes a check with the server to see if a bridge
-    //is in range
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+        String name = null;
+        String message = null;
+        int taskCode;
+        //constructor with paramaters to execute addLock case
+        public HttpAsyncTask(Editable name, Editable message, int taskCode) {
+            this.name = name.toString();
+            this.message = message.toString();
+            this.taskCode = taskCode;
+
+        }
+        // empty constructor for proximity check case (Default);
+        //If the current location is not null, executes a check with the server to see if a bridge
+        //is in range
+        public HttpAsyncTask(){
+            this.taskCode = PROXIMITY_CHECK;
+        }
 
         @Override
         protected String doInBackground(String... params) {
-            Location currentLocation = BridgeProximity.getInstance().getCurrentlocation();
-            boolean inRange = false;
-            if(currentLocation != null){
-                inRange = ServerRelay.isInBridgeRange("" + currentLocation.getLatitude(), "" + currentLocation.getLongitude());
+            switch (taskCode) {
+                case PROXIMITY_CHECK:
+                    Location currentLocation = BridgeProximity.getInstance().getCurrentlocation();
+                    boolean inRange = false;
+                    if (currentLocation != null) {
+                        inRange = ServerRelay.isInBridgeRange("" + currentLocation.getLatitude(), "" + currentLocation.getLongitude());
+                    }
+                    BridgeProximity.getInstance().setBridgeProximity(inRange);
+                    return null;
+                case ADD_LOCK:
+                    if (name != null && message != null && BridgeProximity.getInstance().getCurrentlocation() != null){
+                        Location loc = BridgeProximity.getInstance().getCurrentlocation();
+                        String lat = "" + loc.getLatitude();
+                        String lng = "" + loc.getLongitude();
+                        String response[] = responseParser.parseAddResponse(ServerRelay.addLock(name, lat, lng, message));
+                        Lock newLock = new Lock(response[0], name, response[1], message);
+                        LockList.getInstance().addLock(newLock);
+
+                    }
+                    return null;
             }
-            BridgeProximity.getInstance().setBridgeProximity(inRange);
             return null;
         }
     }

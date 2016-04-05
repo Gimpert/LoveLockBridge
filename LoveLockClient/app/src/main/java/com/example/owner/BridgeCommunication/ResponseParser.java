@@ -19,4 +19,18 @@ public class ResponseParser {
         }
         return message;
     }
+
+    public String[] parseAddResponse(String response){
+        JSONObject jsonObject = null;
+        String id = null;
+        String password = null;
+        try {
+            jsonObject = new JSONObject(response);
+            id = jsonObject.getString("id");
+            password = jsonObject.getString("password");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new String[] {id, password};
+    }
 }
