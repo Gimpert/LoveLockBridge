@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,12 +34,12 @@ import java.util.concurrent.ExecutionException;
 public class KeyListAdapter extends ArrayAdapter<Lock> {
     static final String NO_LOCK_MESSAGE = "You are not in range of a bridge.";
     static final String NO_LOCATION = "Loction Unknown.";
-    ResponseParser responseParser;
+    private final static int SEND_LOCK = 0, UNLOCK_LOCK = 1;
 
+    Button sendSubmitButton;
 
     public KeyListAdapter(Context context) {
         super(context, R.layout.key_list_group_item, LockList.getInstance().getList());
-        responseParser = new ResponseParser();
 
     }
 
@@ -63,7 +64,26 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                View popupView = inflater.inflate(R.layout.send_lock_popup, null, false);
+                final PopupWindow popupWindow = new PopupWindow(popupView, 1, 1, true);
+                final EditText recipientEmail = (EditText) popupView.findViewById(R.id.recipient_email_form);
+                final EditText recipientName = (EditText) popupView.findViewById(R.id.recipient_name_form);
+                final EditText senderName = (EditText) popupView.findViewById(R.id.sender_name_form);
+                final EditText senderMessaage = (EditText) popupView.findViewById(R.id.sender_message_form);
+                popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+                popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
 
+                popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
+
+                sendSubmitButton = (Button) popupView.findViewById(R.id.send_submit_button);
+                sendSubmitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new HttpAsyncTask(recipientEmail.getText().toString(),recipientName.getText().toString(),
+                                senderName.getText().toString(), senderMessaage.getText().toString(), lock).execute();
+                        popupWindow.dismiss();
+                    }
+                });
             }
         });
 
@@ -105,7 +125,7 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
 
                         String message;
                         try {
-                            message = responseParser.parseMessage(httpAsyncTask.get());
+                            message = ResponseParser.parseMessage(httpAsyncTask.get());
                             lock.setMessage(message);
                         } catch (Exception e) {
                             message = null;
@@ -132,23 +152,41 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
     }
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
 
+        private String  recipientEmail, recipientName;
+        private String senderName, senderMessage;
+
         private String lat,lng;
         private Lock lock;
+
+        private int taskCode;
+
+        public HttpAsyncTask( String recipientEmail, String recipientName, String senderName, String senderMessage, Lock lock){
+            this.recipientEmail = recipientEmail;
+            this.recipientName = recipientName;
+            this.senderName = senderName;
+            this.senderMessage = senderMessage;
+            this.lock = lock;
+            this.taskCode = SEND_LOCK;
+        }
 
         public HttpAsyncTask(String lat, String lng, Lock lock){
             this.lat = lat;
             this.lng = lng;
             this.lock = lock;
+            this.taskCode = UNLOCK_LOCK;
         }
 
 
         @Override
         protected String doInBackground(String... params) {
-            return ServerRelay.unlockLock(lock.getId(), lat, lng, lock.getPassword());
-
-        }
-        protected void onPostExecute(String result){
-            lock.setMessage(responseParser.parseMessage(result));
+            switch (taskCode) {
+                case SEND_LOCK:
+                    ServerRelay.sendKey(lock.getId(), lock.getPassword(), this.recipientEmail, this.recipientName, this.senderName, this.senderMessage);
+                    break;
+                case UNLOCK_LOCK:
+                    return ServerRelay.unlockLock(lock.getId(), lat, lng, lock.getPassword());
+            }
+            return null;
         }
     }
 }

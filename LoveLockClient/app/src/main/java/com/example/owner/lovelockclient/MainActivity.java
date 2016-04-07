@@ -56,13 +56,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     //String response;
     Button attachButton;
     Button attachSubmitButton;
-    ResponseParser responseParser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         CONTEXT = this;
-        responseParser = new ResponseParser();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -227,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         Location loc = BridgeProximity.getInstance().getCurrentlocation();
                         String lat = "" + loc.getLatitude();
                         String lng = "" + loc.getLongitude();
-                        String response[] = responseParser.parseAddResponse(ServerRelay.addLock(name, lat, lng, message));
+                        String response[] = ResponseParser.parseAddResponse(ServerRelay.addLock(name, lat, lng, message));
                         Lock newLock = new Lock(response[0], name, response[1], message);
                         LockList.getInstance().addLock(newLock);
 

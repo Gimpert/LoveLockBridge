@@ -1,4 +1,11 @@
 <resources>
+
+    <string name="recipient_name">Recipient\'s Name:</string>
+    <string name="recipient_email">Recipient\'s Email Address:</string>
+    <string name="sender_name">Your Name:</string>
+    <string name="email_message">Email Message:</string>
+    <string name="send_key_submit">Send Email</string>
+
     <string name="app_name">Love Lock Client</string>
     <string name="throw_away_key">Throw Away</string>
     <string name="send_key">Send</string>

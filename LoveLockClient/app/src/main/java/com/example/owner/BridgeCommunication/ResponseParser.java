@@ -8,7 +8,7 @@ import org.json.JSONObject;
  */
 public class ResponseParser {
 
-    public String parseMessage(String response){
+    public static String parseMessage(String response){
         JSONObject jsonObject = null;
         String message = null;
         try {
@@ -20,7 +20,7 @@ public class ResponseParser {
         return message;
     }
 
-    public String[] parseAddResponse(String response){
+    public static String[] parseAddResponse(String response){
         JSONObject jsonObject = null;
         String id = null;
         String password = null;
@@ -32,5 +32,17 @@ public class ResponseParser {
             e.printStackTrace();
         }
         return new String[] {id, password};
+    }
+
+    public static String parseSendResponse(String response){
+        JSONObject jsonObject = null;
+        String responseStatus = null;
+        try {
+            jsonObject = new JSONObject(response);
+            responseStatus = jsonObject.getString("result");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return responseStatus;
     }
 }

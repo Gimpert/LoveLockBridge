@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by Joseph Gregory on 2/15/2016.
@@ -31,12 +33,18 @@ public class ServerRelay {
         return sendPostToServer(urlParams, bodyParams);
     }
 
-    public static void sendKey(String lockName, String latitude, String longitude, String lockId, String recipientEmailAddress, String sendString) {
-        
+    public static void sendKey(String lockId, String pswd,String targetEmailAddress, String targetName ,String senderName, String senderMessage) {
+        String urlParams = null;
+        try {
+            urlParams = "/sendKey?" + "id=" + lockId + "&pswd=" + pswd + "&targetEmail=" + URLEncoder.encode(targetEmailAddress, "UTF-8") + "&targetName=" + URLEncoder.encode(targetName, "UTF-8") + "&senderName=" + URLEncoder.encode(senderName, "UTF-8") + "&senderMessage=" + URLEncoder.encode(senderMessage, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        sendGetToServer(urlParams);
     }
 
     public static boolean isInBridgeRange(String latitude, String longitude) {
-        String urlParams = "/lat=" + latitude + "&lng=" + longitude;
+        String urlParams = "/inRangeOfBridge?lat=" + latitude + "&lng=" + longitude;
         if (sendGetToServer(urlParams) == "true") {
             return true;
         }
