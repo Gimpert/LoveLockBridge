@@ -24,7 +24,7 @@ public class LockListTest extends ApplicationTestCase<Application> {
 //    public void loadLocksTest() {
 //        createApplication();
 //
-//        LockList lockList = new LockList();
+//        LockList lockList = LockList.getInstance();
 //        //LockList.DEBUG_STORED_LOCKS_FILENAME = "app/src/main/res/testLocks";
 //        lockList.loadLocks();
 //        ArrayList<Lock> list = lockList.getList();
@@ -40,8 +40,8 @@ public class LockListTest extends ApplicationTestCase<Application> {
 
     public void testSaveLocks() {
         LockList lockList = LockList.getInstance();
-        lockList.addLock(new Lock("324k","Lock 1","This is the secret message"));
-        lockList.addLock(new Lock("23%#@#","Lock 2","secret message of lock 2"));
+        lockList.addLock(new Lock("324k","Lock 1","pass 1"));
+        lockList.addLock(new Lock("23%#@#","Lock 2","password2"));
         lockList.saveLocks();
 
         lockList.loadLocks();
@@ -49,10 +49,10 @@ public class LockListTest extends ApplicationTestCase<Application> {
 
         assertEquals(list.get(0).getId(), "324k");
         assertEquals(list.get(0).getName(), "Lock 1");
-        assertEquals(list.get(0).getMessage(), "This is the secret message");
+        assertEquals(list.get(0).getPassword(), "pass 1");
 
         assertEquals(list.get(1).getId(), "23%#@#");
         assertEquals(list.get(1).getName(), "Lock 2");
-        assertEquals(list.get(1).getMessage(), "secret message of lock 2");
+        assertEquals(list.get(1).getPassword(), "password2");
     }
 }
