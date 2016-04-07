@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_id": "lovelockclient",
+    "project_number": "486559905062",
+    "name": "LoveLockClient"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:486559905062:android:13f6c92ea678892a",
+        "client_id": "android:com.example.owner.lovelockclient",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.example.owner.lovelockclient",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "486559905062-2d4ot83dvqamn4kvr2o23nlj9h6v4m19.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.owner.lovelockclient",
+            "certificate_hash": "EDF645CBCEDEF954484CB9A14D0AB225ED9F21F6"
+          }
+        },
+        {
+          "client_id": "486559905062-kg1gc23h69vl84rqv9krn67ju11eaa4b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
