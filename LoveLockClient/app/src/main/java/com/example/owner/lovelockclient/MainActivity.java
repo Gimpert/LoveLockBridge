@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     //String response;
     Button attachButton;
     Button attachSubmitButton;
+    Button receiveButton;
+    Button receiveSubmitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,30 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+        receiveButton = (Button) findViewById(R.id.bridge_button);
+        receiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final View popupView = inflater.inflate(R.layout.add_lock_popup, null, false );
+                final PopupWindow popupWindow = new PopupWindow(popupView, 1, 1, true );
+                final EditText etLockName = (EditText) popupView.findViewById(R.id.lock_name_form);
+                final EditText etLockMessage = (EditText) popupView.findViewById(R.id.lock_message_form);
+                popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+                popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+
+
+                popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
+
+                receiveSubmitButton = (Button) popupView.findViewById(R.id.add_submit_button);
+                receiveSubmitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new HttpAsyncTask(etLockName.getText(), etLockMessage.getText(), ADD_LOCK).execute();
+                        popupWindow.dismiss();
+                    }
+                });
+            }
+        });
 
 
         //Initialize the Location Service
