@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/lock_name"
+        android:text="@string/receive_key"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
         android:textSize="20dp" />
@@ -20,7 +20,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lock_name_form"
+        android:id="@+id/key_string"
         android:background="#FFFFFF"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.10" />
@@ -29,5 +29,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_submit"
-        android:id="@+id/add_submit_button" />
+        android:id="@+id/receive_submit_button" />
 </LinearLayout>

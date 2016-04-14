@@ -37,6 +37,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.InputMismatchException;
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static Context CONTEXT;
 
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private LocationRequest mLocationRequest;
 
     private static int UPDATE_INTERVAL = 10000,FATEST_INTERVAL = 5000, DISPLACEMENT = 0;
-    private static final int PROXIMITY_CHECK = 0, ADD_LOCK = 1;
+    private static final int PROXIMITY_CHECK = 0, ADD_LOCK = 1, RECEIVE_KEY = 2;
     private static final int REQUEST_LOCATION = 0;
 
     TextView etResponse;
@@ -114,22 +116,30 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         receiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final View popupView = inflater.inflate(R.layout.add_lock_popup, null, false );
+                final View popupView = inflater.inflate(R.layout.receive_lock_popup, null, false );
                 final PopupWindow popupWindow = new PopupWindow(popupView, 1, 1, true );
-                final EditText etLockName = (EditText) popupView.findViewById(R.id.lock_name_form);
-                final EditText etLockMessage = (EditText) popupView.findViewById(R.id.lock_message_form);
+                final EditText etKeyString = (EditText) popupView.findViewById(R.id.key_string);
                 popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
                 popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
 
 
                 popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);
 
-                receiveSubmitButton = (Button) popupView.findViewById(R.id.add_submit_button);
+                receiveSubmitButton = (Button) popupView.findViewById(R.id.receive_submit_button);
                 receiveSubmitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new HttpAsyncTask(etLockName.getText(), etLockMessage.getText(), ADD_LOCK).execute();
-                        popupWindow.dismiss();
+                        try {
+                            String [] keyValues = ResponseParser.parseKeyString(etKeyString.getText().toString());
+                            Lock lock = new Lock(keyValues[1], keyValues[0], keyValues[2]);
+                            LockList.getInstance().addLock(lock);
+                            listAdapter.notifyDataSetChanged();
+                            popupWindow.dismiss();
+                        } catch (InputMismatchException e) {
+                            Toast.makeText(MainActivity.this, "Incorrect key string format.", Toast.LENGTH_SHORT).show();
+                            popupWindow.dismiss();
+                        }
+
                     }
                 });
             }
@@ -228,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             this.taskCode = taskCode;
 
         }
+
         // empty constructor for proximity check case (Default);
         //If the current location is not null, executes a check with the server to see if a bridge
         //is in range
