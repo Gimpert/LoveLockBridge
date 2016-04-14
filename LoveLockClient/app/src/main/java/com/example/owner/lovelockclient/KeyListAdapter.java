@@ -79,8 +79,27 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                 sendSubmitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new HttpAsyncTask(recipientEmail.getText().toString(),recipientName.getText().toString(),
-                                senderName.getText().toString(), senderMessaage.getText().toString(), lock).execute();
+                        HttpAsyncTask httpAsyncTask = new HttpAsyncTask(recipientEmail.getText().toString(),recipientName.getText().toString(),
+                                senderName.getText().toString(), senderMessaage.getText().toString(), lock);
+                        httpAsyncTask.execute();
+                        String result = "";
+                        try {
+                            result = httpAsyncTask.get();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                        if(result.toLowerCase().equals("message sent")) {
+                            Toast burnt = Toast.makeText(MainActivity.getContext(), "Sent key for " + lock.getName() +
+                                    "to " + recipientName.getText().toString(), Toast.LENGTH_SHORT);
+                            burnt.setGravity(0, 0, 0);
+                            burnt.show();
+//                            LockList.getInstance().removeLock(lock);
+//                            LockList.getInstance().getList().remove(lock);
+//                            notifyDataSetChanged();
+                        }
+
                         popupWindow.dismiss();
                     }
                 });
@@ -93,7 +112,10 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                 LockList.getInstance().removeLock(lock);
                 LockList.getInstance().getList().remove(lock);
                 notifyDataSetChanged();
-                Toast.makeText(MainActivity.getContext(), "Removed " + lock.getName(), Toast.LENGTH_SHORT).show();
+
+                Toast burnt = Toast.makeText(MainActivity.getContext(), "Removed " + lock.getName(), Toast.LENGTH_SHORT);
+                burnt.setGravity(0,0,0);
+                burnt.show();
                 //TODO create toast to notify user
             }
         });
@@ -181,12 +203,16 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
         protected String doInBackground(String... params) {
             switch (taskCode) {
                 case SEND_LOCK:
-                    ServerRelay.sendKey(lock.getId(), lock.getPassword(), this.recipientEmail, this.recipientName, this.senderName, this.senderMessage);
-                    break;
+                    String response = ServerRelay.sendKey(lock.getId(), lock.getPassword(), this.recipientEmail, this.recipientName, this.senderName, this.senderMessage);
+                    return ResponseParser.parseSendResponse(response);
                 case UNLOCK_LOCK:
                     return ServerRelay.unlockLock(lock.getId(), lat, lng, lock.getPassword());
             }
             return null;
+        }
+
+        public void updateLockList(){
+            notifyDataSetChanged();
         }
     }
 }

@@ -36,7 +36,7 @@ public class BridgeProximity {
 
     public void setCurrentlocation(Location currentlocation){
         this.currentlocation = currentlocation;
-    }
+}
 
     public boolean isBridgeProximity() {
         return bridgeProximity;
