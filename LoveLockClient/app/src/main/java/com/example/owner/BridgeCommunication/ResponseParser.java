@@ -3,6 +3,9 @@ package com.example.owner.BridgeCommunication;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.InputMismatchException;
+import java.util.UnknownFormatConversionException;
+
 /**
  * Created by Joseph Gregory on 2/15/2016.
  */
@@ -44,5 +47,21 @@ public class ResponseParser {
             e.printStackTrace();
         }
         return responseStatus;
+    }
+
+    public static String[] parseKeyString(String keyString) throws InputMismatchException {
+        String KEYSTRING = keyString;
+        int colon1Idx = keyString.indexOf(':');
+        int colon2Idx = keyString.lastIndexOf(':');
+        if (colon1Idx <=0 || colon2Idx <= 2 || colon1Idx+1 >= colon2Idx) {
+            throw new InputMismatchException();
+        }
+
+        String keyName = keyString.substring(0, colon1Idx);
+        String keyId = keyString.substring(colon1Idx+1, colon2Idx);
+        String keyPass = keyString.substring(colon2Idx+1);
+
+        String[] keyValues = {keyName, keyId, keyPass};
+        return keyValues;
     }
 }

@@ -37,6 +37,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.InputMismatchException;
+
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static Context CONTEXT;
 
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         if (locationClient == null) {
             locationClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -151,6 +155,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         keyListView.setAdapter(listAdapter);
 
+        keyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String testToast = ((Lock) keyListView.getItemAtPosition(position)).getName();
+                Toast.makeText(MainActivity.this, testToast, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -162,8 +173,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnected(Bundle bundle) {
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -182,11 +192,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
 
     }
-
-//    protected void startLocationUpdates() {
-//        LocationServices.FusedLocationApi.requestLocationUpdates(
-//                locationClient, mLocationRequest, this);
-//    }
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
@@ -215,13 +220,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-
-    }
-
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
         String name = null;
         String message = null;
@@ -250,9 +248,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         inRange = ServerRelay.isInBridgeRange("" + currentLocation.getLatitude(), "" + currentLocation.getLongitude());
                     }
                     BridgeProximity.getInstance().setBridgeProximity(inRange);
-                    if(inRange){
-
-                    }
                     return null;
                 case ADD_LOCK:
                     if (name != null && message != null && BridgeProximity.getInstance().getCurrentlocation() != null){
