@@ -172,6 +172,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(Bundle bundle) {
+        startLocationUpdates();
+    }
+
+    protected void startLocationUpdates() {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -190,7 +194,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             BridgeProximity.getInstance().setCurrentlocation(lastLocation);
             new HttpAsyncTask().execute();
         }
-
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                locationClient, mLocationRequest, this);
     }
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -220,6 +225,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        BridgeProximity prox = BridgeProximity.getInstance();
+        prox.setCurrentlocation(location);
+        new HttpAsyncTask().execute();
+    }
+
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
         String name = null;
         String message = null;
