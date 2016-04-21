@@ -19,7 +19,7 @@ public class ServerRelay {
 
 
     public static String pingServer(String latitude, String longitude, String range) {
-        String urlParams = "/pingServer";
+        String urlParams = "/registerBridge";
         String bodyParams = "lat=" + latitude + "&lng=" + longitude + "&range=" + range;;
         return sendPostToServer(urlParams, bodyParams);
     }
