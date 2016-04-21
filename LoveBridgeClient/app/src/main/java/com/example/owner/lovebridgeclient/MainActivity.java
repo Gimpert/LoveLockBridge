@@ -22,6 +22,11 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 
@@ -164,4 +169,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             //if (there is a new string in the result compared to previous result) initialize animation
         }
     }
+
+
 }
