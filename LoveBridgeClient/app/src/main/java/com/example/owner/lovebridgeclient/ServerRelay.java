@@ -18,9 +18,9 @@ public class ServerRelay {
     private static String URL = DEFAULT_URL;
 
 
-    public static String pingServer(String latitude, String longitude) {
+    public static String pingServer(String latitude, String longitude, String range) {
         String urlParams = "/pingServer";
-        String bodyParams = "lat=" + latitude + "&lng=" + longitude;
+        String bodyParams = "lat=" + latitude + "&lng=" + longitude + "&range=" + range;;
         return sendPostToServer(urlParams, bodyParams);
     }
 
