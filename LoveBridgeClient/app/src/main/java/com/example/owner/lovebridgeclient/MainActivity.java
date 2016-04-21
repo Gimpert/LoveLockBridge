@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     Button submitSetupButton;
     float range;
 
+    ArrayList<String> oldNearbyClients;
+    ArrayList<String> newNearbyClients;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         final EditText etRangeString = (EditText) popupView.findViewById(R.id.range);
         popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(findViewById(R.id.content_main), Gravity.CENTER, 0, 0);
         submitSetupButton = (Button) popupView.findViewById(R.id.submit_setup);
         submitSetupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,17 +161,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         }
 
-        protected String sendLocation() {
+        protected void sendLocation() {
             Location currentLocation = BridgeProximity.getInstance().getCurrentlocation();
             String result = "";
             if (currentLocation != null) {
                 result = ServerRelay.pingServer("" + currentLocation.getLatitude(), "" + currentLocation.getLongitude(), Float.toString(range));
             }
-            return "";
-            //TODO: initialize animation
-            //if (there is a new string in the result compared to previous result) initialize animation
+            if (isNewClientNearby(result)) {
+                //TODO: initialize animation
+                //doAnimation();
+            }
         }
     }
 
+    public boolean isNewClientNearby(String result) {
+        oldNearbyClients = newNearbyClients;
+        newNearbyClients = ResponseParser.parseResponse(result);
 
+        for (String client : newNearbyClients) {
+            if (!oldNearbyClients.contains(client)) return true;
+        }
+
+        return false;
+    }
 }
