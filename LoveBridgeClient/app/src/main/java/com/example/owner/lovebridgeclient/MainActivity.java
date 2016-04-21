@@ -3,17 +3,24 @@ package com.example.owner.lovebridgeclient;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     ServerRelay serverRelay;
     GoogleApiClient locationClient = null;
+    LocationRequest mLocationRequest = null;
+    private static final int REQUEST_LOCATION = 0;
+    private static int UPDATE_INTERVAL = 10000,FATEST_INTERVAL = 5000, DISPLACEMENT = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         startLocationUpdates();
     }
 
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
     protected void startLocationUpdates() {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -49,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION} ,REQUEST_LOCATION);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION} , REQUEST_LOCATION);
             return;
         }
         Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -82,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         prox.setCurrentlocation(location);
         new HttpAsyncTask().execute();
     }
+
+
 
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
 
