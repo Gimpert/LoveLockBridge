@@ -1,6 +1,7 @@
 package com.example.owner.lovebridgeclient;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -69,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                setupMenu();
+
+                //setupMenu();
             }
         }, 100);
 
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         final EditText etRangeString = (EditText) popupView.findViewById(R.id.range);
         popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.CENTER, 0, 0);
         submitSetupButton = (Button) popupView.findViewById(R.id.submit_setup);
         submitSetupButton.setOnClickListener(new View.OnClickListener() {
             @Override

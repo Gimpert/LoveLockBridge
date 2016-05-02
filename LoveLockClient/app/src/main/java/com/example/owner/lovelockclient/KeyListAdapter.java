@@ -92,8 +92,7 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                         }
                         if(result.toLowerCase().equals("message sent")) {
                             Toast burnt = Toast.makeText(MainActivity.getContext(), "Sent key for " + lock.getName() +
-                                    "to " + recipientName.getText().toString(), Toast.LENGTH_SHORT);
-                            burnt.setGravity(0, 0, 0);
+                                    " to " + recipientName.getText().toString(), Toast.LENGTH_SHORT);
                             burnt.show();
 //                            LockList.getInstance().removeLock(lock);
 //                            LockList.getInstance().getList().remove(lock);
