@@ -27,13 +27,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Owner on 2/16/2016.
  */
 public class KeyListAdapter extends ArrayAdapter<Lock> {
-    static final String NO_LOCK_MESSAGE = "You are not in range of a bridge.";
-    static final String NO_LOCATION = "Loction Unknown.";
+    static final String NO_LOCK_MESSAGE = "You are not in range of a bridge";
+    static final String NO_LOCATION = "Loction Unknown";
+    static final String NO_LOCATION_DETAILS = "Turn on your GPS";
     private final static int SEND_LOCK = 0, UNLOCK_LOCK = 1;
 
     Button sendSubmitButton;
@@ -43,6 +46,11 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
 
     }
 
+    private void removeLock(Lock lock) {
+        LockList.getInstance().removeLock(lock);
+        LockList.getInstance().getList().remove(lock);
+        notifyDataSetChanged();
+    }
 
 
     @Override
@@ -60,6 +68,7 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
         Button unlock_button = (Button) view.findViewById(R.id.unlock_button);
         Button throw_button = (Button) view.findViewById(R.id.throw_away_button);
         keyName.setText(lock.getName());
+
 
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,24 +88,33 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                 sendSubmitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (recipientEmail.getText().toString().equals("") || recipientName.getText().toString().equals("") ||
+                                senderName.getText().toString().equals("") || senderMessaage.getText().toString().equals("")) {
+                            Toast.makeText(MainActivity.getContext(), "Fields cannot be blank", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         HttpAsyncTask httpAsyncTask = new HttpAsyncTask(recipientEmail.getText().toString(),recipientName.getText().toString(),
                                 senderName.getText().toString(), senderMessaage.getText().toString(), lock);
                         httpAsyncTask.execute();
                         String result = "";
                         try {
-                            result = httpAsyncTask.get();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (ExecutionException e) {
+                            result = httpAsyncTask.get(MainActivity.TIMEOUT_SECONDS, TimeUnit.SECONDS);
+                        } catch (TimeoutException e) {
+                            Toast.makeText(MainActivity.getContext(),"Server Timeout", Toast.LENGTH_SHORT).show();
+                            return;
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        if(result.toLowerCase().equals("message sent")) {
-                            Toast burnt = Toast.makeText(MainActivity.getContext(), "Sent key for " + lock.getName() +
-                                    " to " + recipientName.getText().toString(), Toast.LENGTH_SHORT);
-                            burnt.show();
-//                            LockList.getInstance().removeLock(lock);
-//                            LockList.getInstance().getList().remove(lock);
-//                            notifyDataSetChanged();
+                        if(result == null) {
+                            Toast.makeText(MainActivity.getContext(),"Network Error", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if(result.toLowerCase().equals("message sent")) {
+                                Toast.makeText(MainActivity.getContext(), "Sent key for " + lock.getName() +
+                                        " to " + recipientName.getText().toString(), Toast.LENGTH_SHORT).show();
+                                removeLock(lock);
+                            } else {
+                                Toast.makeText(MainActivity.getContext(),"Invalid Field(s)", Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         popupWindow.dismiss();
@@ -108,14 +126,11 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
         throw_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LockList.getInstance().removeLock(lock);
-                LockList.getInstance().getList().remove(lock);
-                notifyDataSetChanged();
+                removeLock(lock);
 
                 Toast burnt = Toast.makeText(MainActivity.getContext(), "Removed " + lock.getName(), Toast.LENGTH_SHORT);
                 burnt.setGravity(0,0,0);
                 burnt.show();
-                //TODO create toast to notify user
             }
         });
 
@@ -146,8 +161,11 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
 
                         String message;
                         try {
-                            message = ResponseParser.parseMessage(httpAsyncTask.get());
+                            message = ResponseParser.parseMessage(httpAsyncTask.get(MainActivity.TIMEOUT_SECONDS, TimeUnit.SECONDS));
                             lock.setMessage(message);
+                        } catch (TimeoutException e) {
+                            Toast.makeText(MainActivity.getContext(),"Server Timeout", Toast.LENGTH_SHORT).show();
+                            message = null;
                         } catch (Exception e) {
                             message = null;
                         }
@@ -156,11 +174,13 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                             message_name.setText(NO_LOCK_MESSAGE);
                             message_body.setText("");
                         } else {
+                            Toast.makeText(MainActivity.getContext(),"Unlocked", Toast.LENGTH_SHORT).show();
                             message_name.setText(headerMessage);
                             message_body.setText(message);
                         }
                     } else {
                         message_name.setText(NO_LOCATION);
+                        message_body.setText(NO_LOCATION_DETAILS);
                     }
 
                     popupWindow.showAtLocation(v.getRootView(), Gravity.CENTER, 0, 0);

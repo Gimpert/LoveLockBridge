@@ -39,10 +39,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.InputMismatchException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static Context CONTEXT;
+    private static final boolean DEBUG = true;
+    private static final String NO_RESPONSE = "No response";
+    public static final long TIMEOUT_SECONDS = 4L;
 
     KeyListAdapter listAdapter;
     ListView keyListView;
@@ -107,7 +113,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 attachSubmitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new HttpAsyncTask(etLockName.getText(), etLockMessage.getText(), ADD_LOCK).execute();
+                        if (etLockName.getText().toString().equals("") || etLockMessage.getText().toString().equals("")) {
+                            Toast.makeText(MainActivity.getContext(),"Fields cannot be blank", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        HttpAsyncTask httpAsyncTask = new HttpAsyncTask(etLockName.getText(), etLockMessage.getText(), ADD_LOCK);
+                        httpAsyncTask.execute();
+                        String result = "";
+                        try {
+                            result = httpAsyncTask.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+                        } catch (TimeoutException e) {
+                            Toast.makeText(MainActivity.getContext(),"Server Timeout", Toast.LENGTH_SHORT).show();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                        if (result != null && result.equals(NO_RESPONSE)) {
+                            Toast.makeText(MainActivity.getContext(),"Network Error", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.getContext(),"Lock Added to Bridge", Toast.LENGTH_SHORT).show();
+                        }
                         popupWindow.dismiss();
                     }
                 });
@@ -136,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             popupWindow.dismiss();
                         } catch (InputMismatchException e) {
                             Toast.makeText(MainActivity.this, "Incorrect key string format.", Toast.LENGTH_SHORT).show();
-                            popupWindow.dismiss();
                         }
                     }
                 });
@@ -272,8 +297,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                         String lat = "" + loc.getLatitude();
                         String lng = "" + loc.getLongitude();
                         String response[] = ResponseParser.parseAddResponse(ServerRelay.addLock(name, lat, lng, message));
-                        Lock newLock = new Lock(response[0], name, response[1], message);
-                        LockList.getInstance().addLock(newLock);
+                        if (response[0] == null || response[1] == null || response[0].equals("") || response[1].equals("")) {
+                            return NO_RESPONSE;
+                        } else {
+                            Lock newLock = new Lock(response[0], name, response[1], message);
+                            LockList.getInstance().addLock(newLock);
+                        }
 
                     }
                     return null;
@@ -295,32 +324,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 //            lockList.addLock(it.next());
 //
 //        }
-        Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock1", "zO1ZsGJL", "This is a test lock." );
-        Lock testlock2 = new Lock("56b3c3d5650066a9ec89cc76", "testLock2", "zO1ZsGJL", "This is another test lock." );
-        Lock testlock3 = new Lock("56b3c3d5650066a9ec89cc76", "testLock3", "zO1ZsGJL", "This is another test lock, but it has a longer message.");
-        Lock testlock4 = new Lock("56b3c3d5650066a9ec89cc76", "testLock4", "zO1ZsGJL", "This is another test lock, but it has a much longer message. Seriously, this lock's message is pretty long. At least a couple lines." );
-        Lock testlock5 = new Lock("56eadde0ce93f260099b8d39", "unlockTestLock5", "zO1ZsGJL");
-        Lock testlock6 = new Lock("56b3c3d5650066a9ec89cc76", "testLock6", "zO1ZsGJL", "This is another test lock" );
-        Lock testlock7 = new Lock("56b3c3d5650066a9ec89cc76", "testLock7", "zO1ZsGJL", "This is another test lock" );
-        Lock testlock8 = new Lock("56b3c3d5650066a9ec89cc76", "testLock8", "zO1ZsGJL", "This is another test lock" );
-        Lock testlock9 = new Lock("56b3c3d5650066a9ec89cc76", "testLock9", "zO1ZsGJL", "This is another test lock" );
-        Lock testlock10 = new Lock("56b3c3d5650066a9ec89cc76", "testLock10", "zO1ZsGJL", "This is another test lock" );
-        Lock testlock11 = new Lock("56b3c3d5650066a9ec89cc76", "testLock11", "zO1ZsGJL", "This is another test lock" );
-        Lock testlock12 = new Lock("56b3c3d5650066a9ec89cc76", "testLock12", "zO1ZsGJL", "This is another test lock" );
-        lockList.addLock(testlock1);
-        lockList.addLock(testlock2);
-        lockList.addLock(testlock3);
-        lockList.addLock(testlock4);
-        lockList.addLock(testlock5);
-        lockList.addLock(testlock6);
-        lockList.addLock(testlock7);
-        lockList.addLock(testlock8);
-        lockList.addLock(testlock9);
-        lockList.addLock(testlock10);
-        lockList.addLock(testlock11);
-        lockList.addLock(testlock12);
-
-
+        if (DEBUG) {
+            Lock testlock1 = new Lock("56b3c3d5650066a9ec89cc75", "testLock1", "zO1ZsGJL", "This is a test lock." );
+            Lock testlock2 = new Lock("56b3c3d5650066a9ec89cc76", "testLock2", "zO1ZsGJL", "This is another test lock." );
+            Lock testlock3 = new Lock("56b3c3d5650066a9ec89cc76", "testLock3", "zO1ZsGJL", "This is another test lock, but it has a longer message.");
+            Lock testlock4 = new Lock("56b3c3d5650066a9ec89cc76", "testLock4", "zO1ZsGJL", "This is another test lock, but it has a much longer message. Seriously, this lock's message is pretty long. At least a couple lines." );
+            Lock testlock5 = new Lock("56eadde0ce93f260099b8d39", "unlockTestLock5", "zO1ZsGJL");
+            Lock testlock6 = new Lock("56b3c3d5650066a9ec89cc76", "testLock6", "zO1ZsGJL", "This is another test lock" );
+            Lock testlock7 = new Lock("56b3c3d5650066a9ec89cc76", "testLock7", "zO1ZsGJL", "This is another test lock" );
+            Lock testlock8 = new Lock("56b3c3d5650066a9ec89cc76", "testLock8", "zO1ZsGJL", "This is another test lock" );
+            Lock testlock9 = new Lock("56b3c3d5650066a9ec89cc76", "testLock9", "zO1ZsGJL", "This is another test lock" );
+            Lock testlock10 = new Lock("56b3c3d5650066a9ec89cc76", "testLock10", "zO1ZsGJL", "This is another test lock" );
+            Lock testlock11 = new Lock("56b3c3d5650066a9ec89cc76", "testLock11", "zO1ZsGJL", "This is another test lock" );
+            Lock testlock12 = new Lock("56b3c3d5650066a9ec89cc76", "testLock12", "zO1ZsGJL", "This is another test lock" );
+            lockList.addLock(testlock1);
+            lockList.addLock(testlock2);
+            lockList.addLock(testlock3);
+            lockList.addLock(testlock4);
+            lockList.addLock(testlock5);
+            lockList.addLock(testlock6);
+            lockList.addLock(testlock7);
+            lockList.addLock(testlock8);
+            lockList.addLock(testlock9);
+            lockList.addLock(testlock10);
+            lockList.addLock(testlock11);
+            lockList.addLock(testlock12);
+        }
     }
 
     @Override

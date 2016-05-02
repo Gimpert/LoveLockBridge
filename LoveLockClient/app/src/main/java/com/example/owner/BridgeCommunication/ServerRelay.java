@@ -33,7 +33,7 @@ public class ServerRelay {
         return sendPostToServer(urlParams, bodyParams);
     }
 
-    public static String sendKey(String lockId, String pswd,String targetEmailAddress, String targetName ,String senderName, String senderMessage) {
+    public static String sendKey(String lockId, String pswd, String targetEmailAddress, String targetName , String senderName, String senderMessage) {
         String urlParams = null;
         try {
             urlParams = "/sendKey?" + "id=" + lockId + "&pswd=" + pswd + "&targetEmail=" + URLEncoder.encode(targetEmailAddress, "UTF-8") + "&targetName=" + URLEncoder.encode(targetName, "UTF-8") + "&senderName=" + URLEncoder.encode(senderName, "UTF-8") + "&senderMessage=" + URLEncoder.encode(senderMessage, "UTF-8");
