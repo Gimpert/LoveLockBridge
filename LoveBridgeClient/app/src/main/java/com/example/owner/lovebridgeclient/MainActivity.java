@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         lockSlide.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                lock1.setTranslationX(-45);
                 lock1.setImageResource(R.drawable.lock_md_96);
 
 
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                lock1.setTranslationX(0);
                 if (BridgeProximity.getInstance().isBridgeProximity()){
                     lock1.startAnimation(lockRotate);
                 }else {
@@ -128,11 +130,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         lockRotate.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                lock1.setRotation(-45);
                 lock1.setImageResource(R.drawable.lock_n_key_96);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                lock1.setRotation(0);
                 if (BridgeProximity.getInstance().isBridgeProximity()){
                     lock1.startAnimation(lockRotate);
                 }else {
@@ -206,13 +210,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 locationClient);
         if (lastLocation != null) {
             BridgeProximity.getInstance().setCurrentlocation(lastLocation);
-            try {
-                ResponseParser.parseResponse(new HttpAsyncTask().execute().get());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
 
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(
@@ -302,9 +299,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             Location currentLocation = BridgeProximity.getInstance().getCurrentlocation();
             String result = "";
             if (currentLocation != null) {
-                result = ServerRelay.pingServer(bridgeName, "" + currentLocation.getLatitude(), "" + currentLocation.getLongitude(), Float.toString(range));
+                result = ServerRelay.pingServer(bridgeName, "" + currentLocation.getLatitude(), "" + currentLocation.getLongitude(), "" + range);
             }
-            return result;
+            newNearbyClients = ResponseParser.parseResponse(result);
+            if(!newNearbyClients.isEmpty()){
+                BridgeProximity.getInstance().setBridgeProximity(true);
+            }else{
+                BridgeProximity.getInstance().setBridgeProximity(false);
+            }
+            return null;
         }
     }
 
