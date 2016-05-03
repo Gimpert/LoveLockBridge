@@ -15,7 +15,8 @@
         android:text="@string/receive_key"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:layout_marginTop="25dp" />
 
     <EditText
         android:layout_width="match_parent"
