@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -100,7 +101,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         GridLayout gridLayout = (GridLayout) findViewById(R.id.main_layout);
         lock1 = (ImageView) gridLayout.findViewById(R.id.lock1);
         lockSlide =  (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.lock_slide);
+        lockSlide.setInterpolator(new LinearInterpolator());
+
         lockRotate = (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.lock_rotate);
+        lockSlide.setInterpolator(new LinearInterpolator());
 
         lockSlide.setAnimationListener(new Animation.AnimationListener() {
             @Override

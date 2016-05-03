@@ -15,17 +15,18 @@ public class ResponseParser {
 
     public static ArrayList<String> parseResponse(String response){
         JSONObject jsonObject = null;
+        JSONArray jsonArr = null;
         ArrayList<String> newClients = new ArrayList<String>();
         try {
             jsonObject = new JSONObject(response);
             JSONObject row = null;
-            JSONArray jsonArr = jsonObject.getJSONArray("nearbyClients");
+            jsonArr = jsonObject.getJSONArray("nearbyClients");
             if (jsonArr != null) {
                 System.out.println(jsonArr.toString());
                 int len = jsonArr.length();
                 for (int i=0;i<len;i++){
                     row = jsonArr.getJSONObject(i);
-                    newClients.add(jsonObject.getString("_id"));
+                    newClients.add(jsonObject.getString("id"));
                 }
             }
         } catch (JSONException e) {
