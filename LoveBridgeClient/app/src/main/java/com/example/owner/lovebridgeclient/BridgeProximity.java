@@ -6,7 +6,7 @@ import android.location.Location;
  * Created by Owner on 3/22/2016.
  */
 public class BridgeProximity {
-    private boolean bridgeProximity;
+    private boolean bridgeProximity = false;
     private Location currentlocation;
 
     private static BridgeProximity instance = null;

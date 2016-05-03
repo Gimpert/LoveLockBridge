@@ -20,9 +20,10 @@ public class ResponseParser {
             jsonObject = new JSONObject(response);
             JSONArray jsonArr = jsonObject.getJSONArray("nearbyClients");
             if (jsonArr != null) {
+                System.out.println(jsonArr.toString());
                 int len = jsonArr.length();
                 for (int i=0;i<len;i++){
-                    newClients.add(jsonArr.get(i).toString());
+                    newClients.add(jsonArr.getString(i));
                 }
             }
         } catch (JSONException e) {

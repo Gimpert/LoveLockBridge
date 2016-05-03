@@ -13,8 +13,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -32,6 +39,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.concurrent.ExecutionException;
+
 import android.os.Handler;
 
 
@@ -42,10 +51,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final int REQUEST_LOCATION = 0;
     private static int UPDATE_INTERVAL = 10000, FATEST_INTERVAL = 5000, DISPLACEMENT = 0;
     Button submitSetupButton;
-    float range;
+    float range = 100;
+    AnimationSet lockSlide;
+    AnimationSet lockRotate;
+    ImageView lock1;
+    Animation.AnimationListener animationListener;
+
+
 
     ArrayList<String> oldNearbyClients;
     ArrayList<String> newNearbyClients;
+    String bridgeName = "default";
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -77,10 +93,63 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
         //Initialize the Location Service
-        new HttpAsyncTask().execute();
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        GridLayout gridLayout = (GridLayout) findViewById(R.id.main_layout);
+        lock1 = (ImageView) gridLayout.findViewById(R.id.lock1);
+        lockSlide =  (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.lock_slide);
+        lockRotate = (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.lock_rotate);
+
+        lockSlide.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                lock1.setImageResource(R.drawable.lock_md_96);
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (BridgeProximity.getInstance().isBridgeProximity()){
+                    lock1.startAnimation(lockRotate);
+                }else {
+                    lock1.startAnimation(lockSlide);
+                }
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        lockRotate.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                lock1.setImageResource(R.drawable.lock_n_key_96);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (BridgeProximity.getInstance().isBridgeProximity()){
+                    lock1.startAnimation(lockRotate);
+                }else {
+                    lock1.startAnimation(lockSlide);
+                }
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        new HttpAsyncTask().execute();
+        lock1.startAnimation(lockSlide);
+
+
     }
 
     public void setupMenu() {
@@ -137,7 +206,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 locationClient);
         if (lastLocation != null) {
             BridgeProximity.getInstance().setCurrentlocation(lastLocation);
-            new HttpAsyncTask().execute();
+            try {
+                ResponseParser.parseResponse(new HttpAsyncTask().execute().get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 locationClient, mLocationRequest, this);
@@ -213,25 +289,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         protected String doInBackground(String... params) {
             while (true) {
-                sendLocation();
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
 
                 }
+                return sendLocation();
             }
         }
 
-        protected void sendLocation() {
+        protected String sendLocation() {
             Location currentLocation = BridgeProximity.getInstance().getCurrentlocation();
             String result = "";
             if (currentLocation != null) {
-                result = ServerRelay.pingServer("" + currentLocation.getLatitude(), "" + currentLocation.getLongitude(), Float.toString(range));
+                result = ServerRelay.pingServer(bridgeName, "" + currentLocation.getLatitude(), "" + currentLocation.getLongitude(), Float.toString(range));
             }
-            if (isNewClientNearby(result)) {
-                //TODO: initialize animation
-                //doAnimation();
-            }
+            return result;
         }
     }
 

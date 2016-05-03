@@ -3,7 +3,7 @@
     android:interpolator="@android:anim/accelerate_decelerate_interpolator"
     >
     <rotate
-        android:duration="500"
+        android:duration="1000"
         android:propertyName="rotation"
         android:repeatCount="2"
         android:repeatMode="reverse"

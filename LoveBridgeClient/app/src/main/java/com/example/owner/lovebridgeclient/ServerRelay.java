@@ -18,9 +18,11 @@ public class ServerRelay {
     private static String URL = DEFAULT_URL;
 
 
-    public static String pingServer(String latitude, String longitude, String range) {
+    public static String pingServer(String name,  String latitude, String longitude, String range) {
         String urlParams = "/registerBridge";
-        String bodyParams = "lat=" + latitude + "&lng=" + longitude + "&range=" + range;;
+        String bodyParams = null;
+        bodyParams = "name=" + name + "&lat=" + latitude + "&lng=" + longitude + "&range=" + range;
+        ;
         return sendPostToServer(urlParams, bodyParams);
     }
 
