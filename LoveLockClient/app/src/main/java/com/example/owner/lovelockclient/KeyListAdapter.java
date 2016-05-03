@@ -97,6 +97,7 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                         }
                         if(result == null) {
                             Toast.makeText(MainActivity.getContext(),"Network Error", Toast.LENGTH_SHORT).show();
+                            return;
                         } else {
                             if(result.toLowerCase().equals("message sent")) {
                                 Toast.makeText(MainActivity.getContext(), "Sent key for " + lock.getName() +
@@ -104,6 +105,7 @@ public class KeyListAdapter extends ArrayAdapter<Lock> {
                                 removeLock(lock);
                             } else {
                                 Toast.makeText(MainActivity.getContext(),"Invalid Field(s)", Toast.LENGTH_SHORT).show();
+                                return;
                             }
                         }
 

@@ -45,7 +45,8 @@ public class ServerRelay {
 
     public static boolean isInBridgeRange(String latitude, String longitude) {
         String urlParams = "/inRangeOfBridge?lat=" + latitude + "&lng=" + longitude;
-        if (sendGetToServer(urlParams) == "true") {
+        String result = sendGetToServer(urlParams);
+        if (result.equals("true\r")) {
             return true;
         }
         return false;

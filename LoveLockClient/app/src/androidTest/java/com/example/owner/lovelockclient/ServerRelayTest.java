@@ -48,7 +48,7 @@ public class ServerRelayTest extends ApplicationTestCase<Application> {
 
     public void testSendKey() {
         serverRelay = new ServerRelay();
-        String resp = serverRelay.sendKey("56eadde0ce93f260099b8d39","zO1ZsGJL", "jcgrego3@ncsu.edu", "Joe Biden", "President Obama", "Here is the key to my heart");
+        String resp = serverRelay.sendKey("56eadde0ce93f260099b8d39","zO1ZsGJL", "jcgrego3@ncsu.edu", "Joe", "Dan", "Here is my key");
         assertTrue(resp.toLowerCase().equals("message sent"));
     }
 
