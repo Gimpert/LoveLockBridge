@@ -375,10 +375,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         return super.onOptionsItemSelected(item);
     }
 
-    public void fadeImage() {
-        ImageView fadeImageView= (ImageView)findViewById(imgView);
-        Animation myFadeInAnimation = AnimationUtils2.loadAnimation(this, R.anim.fade_out);
-        fadeImageView.startAnimation(myFadeInAnimation);
-    }
+//    public void fadeImage() {
+//        ImageView fadeImageView= (ImageView)findViewById(imgView);
+//        Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+//        fadeImageView.startAnimation(myFadeInAnimation);
+//    }
 
 }

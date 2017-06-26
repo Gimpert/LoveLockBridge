@@ -11,7 +11,7 @@
     <string name="send_key">Send</string>
     <string name="unlock">Unlock</string>
     <string name="create">Create New Lock</string>
-    <string name="add_lock">Add Lock To List</string>
+    <string name="add_lock">Receive Key</string>
     <string name="add_submit"> Create</string>
     <string name="lock_message">Lock Message: </string>
     <string name="lock_name">Lock Name:</string>
